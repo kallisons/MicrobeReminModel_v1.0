@@ -1,0 +1,1 @@
+../Input/BATS/Profile_Mean10m.in
