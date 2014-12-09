@@ -3,7 +3,7 @@
 rm filename1.txt
 rm filename2.txt
 
-filepath1=../Input/BATS/
+filepath1=../../Input/BATS/
 
 	echo "${filepath1}Force_30sTimeStep.in">filename1.txt
 	echo "${filepath1}Profile_Mean10m.in">filename2.txt
