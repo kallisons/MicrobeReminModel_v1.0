@@ -30,7 +30,7 @@ par(cex.axis=1)
 par(cex.lab=1)
 par(cex.main=1)
 
-pdepth<--2000
+pdepth<--4000
 
 #----------------------
 # Plot State Variables

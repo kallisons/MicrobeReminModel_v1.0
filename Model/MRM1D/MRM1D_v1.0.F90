@@ -368,7 +368,6 @@ IMPLICIT NONE
     REAL::  qxfit
     INTEGER::  scenario
     REAL::  havail
-    INTEGER::  etype
     REAL::  avar
     REAL::  bvar
     REAL::  xtop
@@ -386,96 +385,77 @@ NAMELIST /control/ w, r_top
 !----------------------------------
 !		SCENARIO CHOICE
 !----------------------------------
-scenario = 4
+scenario = 3
 
-!scenario = 1  (Interior Arrangement)
-!scenario = 3  (Solute Retention)
-!scenario = 4  (Hydrolysate Interception)
+!scenario = 1  (Interior)
+!scenario = 2  (Interception)
+!scenario = 3  (Retention)
 
-!----------------------------------
-!		ENZYME CHOICE
-!----------------------------------
-etype = 2
-
-!etype = 1  (Beta-glucosidase)
-!etype = 2  (Leucine aminopeptidase)
 
 !----------------------------------
 !		PARAMETER VALUES
 !----------------------------------
 !******************************************
 hdom_initial	= 1.5			!mg C m^-3 seawater
-pom_initial		= 0.025			!mg C m^-3 seawater 
+pom_initial		= 0.025			!mg C m^-3 seawater
 bf_initial		= 1.5			!mg C m^-3 seawater
-ba_initial		= 0.000001		!mg C m^-3 seawater 
-denz_initial	= 0				!mg C m^-3 seawater
-enz_initial		= 0				!mg C m^-3 seawater
-h_initial		= 0				!mg C m^-3 seawater
-edom_initial	= 0				!mg C m^-3 seawater
-dedom_initial	= 0				!mg C m^-3 seawater
+ba_initial		= 0.000001		!mg C m^-3 seawater
+denz_initial	= 0.			!mg C m^-3 seawater
+enz_initial		= 0.			!mg C m^-3 seawater
+h_initial		= 0.			!mg C m^-3 seawater
+edom_initial	= 0.			!mg C m^-3 seawater
+dedom_initial	= 0.			!mg C m^-3 seawater
 !******************************************
-q10_b			= 2				!
-q10_enz			= 2				!
-q10_hl			= 2				!
+q10_b			= 2.			!
+q10_enz			= 2.			!
+q10_hl			= 2.			!
 !******************************************
-dz				= 10			!m
+dz				= 10.			!m
 dt				= 0.00833		!h (1 min)
 !******************************************
-w				= 2				!m h^-1	(48 m/day)
+w				= 2.				!m h^-1	(48 m/day)
 r_top			= 0.001			!m (1 mm)
 qfrac			= 0.25			!
-!******************************************				
+!******************************************
 up_max_bf		= 0.25			!h^-1
 up_max_ba		= 0.25			!h^-1
-kh				= 200			!mg C m^-3 particle
-kdom			= 30			!mg C m^-3 seawater
+kh				= 200.			!mg C m^-3 particle
+kdom			= 30.			!mg C m^-3 seawater
 bge_max			= 0.4			!
 basal			= 0.002			!h^-1 at 20°C
 m_bf			= 0.02			!h^-1
-m_ba			= 0.04			!h^-1 
+m_ba			= 0.04			!h^-1
 swim			= 0.09			!m h^-1	(0.076-0.12 Kiorboe et al. 2002)
 run				= 0.002			!h (0.0001-0.004 Kiorboe et al. 2002)
 angle			= -0.67			!(Kiorboe et al. 2002)
-!******************************************				
-ehl				= 30			!72	(Steen and Arnosti 2011)
+!******************************************
+ehl				= 30.			!72	(Steen and Arnosti 2011)
+epom            = 118.          !at 20°C, q10=2 (Steen and Arnosti 2011)
+mr_enz			= 4.9E-9        !Leucine aminopeptidase	(Burley et al. 1990)
+rho_Csub        = 1.29E9        !mg m^-3 density of leucine
+mr_h            = 1.5E-10       !m Leucine (Rawn 1989)
+Ratio_mmC       = 131./72.      !dimensionless, ratio of molar mass Leucine to molar mass of carbon in Leucine
+!******************************************
 f_CaCO3			= 0.075			!mg C (mg CaCO3)^-1	(Klaas and Archer 2002)
 f_opal			= 0.029			!mg C (mg opal)^-1	(Klaas and Archer 2002)
 f_lith          = 0.052			!mg C (mg lithogenic)^-1 (Klaas and Archer 2002)
-flux_CaCO3		= 21			!mg CaCO3 m^-2 d^-1	(Conte et al. 2001)
+flux_CaCO3		= 21.			!mg CaCO3 m^-2 d^-1	(Conte et al. 2001)
 flux_opal		= 4.34			!mg opal m^-2 d^-1 (Conte et al. 2001)
 flux_lith		= 6.77			!mg lith m^-2 d^-1 (Conte et al. 2001)
-!******************************************		
+!******************************************
 bc				= 1.38E-23		!m^2 kg s^-2 K^-1
-!******************************************				
-cperb			= 5E-12			!mg C (bacteria)^-1
-bdiam			= 5E-7			!m (Kirchman 2012)
-blength			= 1E-6			!m (Kirchman 2012)
-!******************************************		
+!******************************************
+cperb			= 5.0E-12			!mg C (bacteria)^-1
+bdiam			= 5.0E-7			!m (Kirchman 2012)
+blength			= 1.0E-6			!m (Kirchman 2012)
+!******************************************
 tt				= 5.			!years (Abell et al. 2000)
 tt_dedom		= 5.			!years
-!******************************************		
+!******************************************
 
 !----------------------------------
 !   SCENARIO SPECIFIC PARAMETERS
 !----------------------------------
-
-IF(etype .eq. 1)THEN
-!Beta-glucosidase
-epom            = 8.6           !at 20°C, q10=2 (Steen and Arnosti 2011)
-rho_Csub        = 1.54E9        !mg m^-3 density of glucose
-mr_enz			= 6.4E-9		!m glucosidase	(Jeng et al. 2010)
-mr_h			= 3.8E-10		!m glucose	(Pappenheimer et al. 1951)
-Ratio_mmC       = 180/72        !dimensionless, ratio of molar mass glucose to molar mass of carbon in glucose
-ENDIF
-
-IF(etype .eq. 2)THEN
-!Leucine aminopeptidase
-epom            = 118           !at 20°C, q10=2 (Steen and Arnosti 2011)
-rho_Csub        = 1.29E9        !mg m^-3 density of leucine
-mr_enz			= 4.9E-9        !Leucine aminopeptidase	(Burley et al. 1990)
-mr_h            = 1.5E-10       !m Leucine (Rawn 1989)
-Ratio_mmC       = 131/72        !dimensionless, ratio of molar mass Leucine to molar mass of carbon in Leucine
-ENDIF
 
 IF(scenario .eq. 1)THEN
 max_epsilon     = 0.027
@@ -484,12 +464,23 @@ qthresh         = 0.37          !fractional particle coverage
 qxfit           = 1.42          !exponent for quorum sensing equation
 ENDIF
 
-IF(scenario .eq. 4)THEN
+IF(scenario .eq. 2)THEN
 max_epsilon     = 0.025
 qk              = 0.43          !fractional particle coverage
 qthresh         = 0.31          !fractional particle coverage
 qxfit           = 1.44          !exponent for quorum sensing equation
+ENDIF
 
+!The enzyme production for scenario 3 (Retention) is determined using a look-up table.
+
+IF(scenario .eq. 3)THEN
+OPEN(60, FILE = 'RetentionEpsilon.txt')
+DO i=1, 100
+READ(60, *) QfracIndex, EpsilonOpt
+RetentionQfrac(i) = QfracIndex
+RetentionEpsilon(i) = EpsilonOpt
+ENDDO
+CLOSE(60)
 ENDIF
 
 !----------------------------------
@@ -514,16 +505,6 @@ CLOSE(59)
 OPEN(UNIT=1, FILE=TimeForce, STATUS='OLD', IOSTAT=OpenStatus1)
 IF (OpenStatus1 > 0) STOP "*** Cannot open the file ***"
 
-IF(scenario .eq. 3)THEN
-OPEN(60, FILE = 'RetentionEpsilon.txt')
-DO i=1, 100
-READ(60, *) QfracIndex, EpsilonOpt
-RetentionQfrac(i) = QfracIndex
-RetentionEpsilon(i) = EpsilonOpt
-ENDDO
-CLOSE(60)
-ENDIF
-
 !----------------------------------
 !       MAKE OUTPUT FILES
 !----------------------------------
@@ -531,7 +512,7 @@ ENDIF
 OPEN(UNIT=2, FILE="StateVariables.out", STATUS='REPLACE')
 OPEN(UNIT=3, FILE="BacteriaRates.out", STATUS='REPLACE')
 OPEN(UNIT=4, FILE="MassTransferRates.out", STATUS='REPLACE')
-OPEN(UNIT=11, FILE="TemperatureScaling.out", STATUS='REPLACE')
+!OPEN(UNIT=11, FILE="TemperatureScaling.out", STATUS='REPLACE')
 
 	
 !----------------------------------
@@ -593,11 +574,11 @@ IF (inputstatus10 < 0) EXIT
 
 ! Calculate temperature scaling for each rate
 	
-    tfac_b =	q10_b**((temp-20)/10)
+    tfac_b =	q10_b**((temp-20.)/10.)
 
-    tfac_enz =	q10_enz**((temp-20)/10)
+    tfac_enz =	q10_enz**((temp-20.)/10.)
 
-    tfac_hl =	q10_hl**((20-temp)/10)
+    tfac_hl =	q10_hl**((20.-temp)/10.)
 
 !----------------------------
 !  SEAWATER CHARACTERISTICS
@@ -609,13 +590,13 @@ IF (inputstatus10 < 0) EXIT
 	
 	F = 0.002591 + 0.000033*temp	!A9
 	
-	Clv = ((rho/1000)*s)/1.80655	!A10  density converted to g cm**-3
+	Clv = ((rho/1000.)*s)/1.80655	!A10  density converted to g cm**-3
 	
-	dv_fw = (10**((-157.095 - 3.09695*temp - 0.001827*temp**2)/(89.93+temp))) !A1 
+	dv_fw = (10.**((-157.095 - 3.09695*temp - 0.001827*temp**2.)/(89.93+temp))) !A1
 	
-	dv_sw = (dv_fw * (1 + E*SQRT(Clv) + F*Clv))*0.1	!A7 dynamic viscosity in kg m^-1 s^-1
+	dv_sw = (dv_fw * (1. + E*SQRT(Clv) + F*Clv))*0.1	!A7 dynamic viscosity in kg m^-1 s^-1
 	
-	kv = (dv_sw/rho)*3600 !kinematic viscosity in m^2 h^-1 
+	kv = (dv_sw/rho)*3600. !kinematic viscosity in m^2 h^-1
 
 
 !----------------------------
@@ -626,7 +607,7 @@ IF (k == 1)THEN
 	
 	r = r_top
 	
-	dw = (17*(r*2*1000)**1.8)  !Iverson et al. 2010 (r*1000 is converting m to mm)
+	dw = (17.*(r*2.*1000.)**1.8)  !Iverson et al. 2010 (r*1000 is converting m to mm)
 	
 	pnum = list_pom(k)/(dw*0.001*0.12) !0.12 is the ratio of POC to dry weight (dw) from Iverson et al. 2010 (dw*0.001 is converting ug to mg)	
 
@@ -635,7 +616,7 @@ END IF
 	
 !Calculate particle volume in order to scale the constants for quorum sensing and hydrolysate uptake
 
-	Vtotal = (4./3.)*3.14*r**3
+	Vtotal = (4./3.)*3.14*r**3.
 
 ! Reynolds Number of a particle
 
@@ -643,7 +624,7 @@ END IF
 
 ! Calculation of Quorum Threshold  (Gram et al. 2002)
 
-    quorum = ((4*3.14*r**2.)/(bdiam*blength))*cperb  ! mg C particle^-1  One layer of bacteria covering the particle
+    quorum = ((4.*3.14*r**2.)/(bdiam*blength))*cperb  ! mg C particle^-1  One layer of bacteria covering the particle
 
 !------------------------
 !    RATE CONSTANTS
@@ -652,16 +633,16 @@ END IF
 
     IF(scenario .eq. 3)THEN
 
-        bacover = (((list_ba(k)/pnum)/cperb)*(bdiam*blength))/(4*3.14*r**2.)
+        bacover = (((list_ba(k)/pnum)/cperb)*(bdiam*blength))/(4.*3.14*r**2.)
 
-            IF (bacover .gt. 1)THEN
+            IF (bacover .gt. 1.)THEN
 
-                bacover = 1
+                bacover = 1.
 
             ENDIF
     ELSE
 
-        bacover = 0
+        bacover = 0.
 
     ENDIF
 
@@ -672,7 +653,7 @@ END IF
 	
 	pomp = list_pom(k)/(pnum*Vtotal)
 
-	gamma = ((f_CaCO3*flux_CaCO3 + f_opal*flux_opal + f_lith*flux_lith)/24/w)!ballast scaling constant for enzyme degradation (Klaas and Archer 2002)
+	gamma = ((f_CaCO3*flux_CaCO3 + f_opal*flux_opal + f_lith*flux_lith)/24./w)!ballast scaling constant for enzyme degradation (Klaas and Archer 2002)
 
     !PRINT*, "gamma = ", gamma
 
@@ -680,9 +661,9 @@ END IF
 	
 	availC = (pomp-gammap)/pomp
 	
-	IF (availC .lt. 0)THEN
+	IF (availC .lt. 0.)THEN
 	
-	availC = 0
+	availC = 0.
 	
 	ENDIF
 	
@@ -697,11 +678,11 @@ END IF
 
 !	rate constant using equation 6a from Kiorboe et al. 2002
 
-	D = tfac_b*((swim*swim*run)/(6*(1-angle)))!(Diffusivity)
+	D = tfac_b*((swim*swim*run)/(6.*(1.-angle)))!(Diffusivity)
 	
-	Sh = 1+0.619*(Re**0.412)*(kv/D)**(1./3.) !(Sherwood Number)
+	Sh = 1.+0.619*(Re**0.412)*(kv/D)**(1./3.) !(Sherwood Number)
 			
-	RW = 4*3.14*D*r*Sh !Encounter Rate Kernel for Random Walk 
+	RW = 4.*3.14*D*r*Sh !Encounter Rate Kernel for Random Walk
 
 	attach = RW*pnum
 	
@@ -709,27 +690,27 @@ END IF
 
 !	hyrolysate rate constant using equation 4 from Kiorboe et al. 2001
 
-	diff_h = ((bc*(temp+273.16))/(6*3.14*dv_sw*mr_h))*3600	!equation 6 from Jumars et al. 1993 converted to h^-1
+	diff_h = ((bc*(temp+273.16))/(6.*3.14*dv_sw*mr_h))*3600.	!equation 6 from Jumars et al. 1993 converted to h^-1
 	
 	sc_h = kv/diff_h !Schmidt Number
 	
-	sh_h = 1 + 0.619*(Re**0.412)*(sc_h)**(1./3.) !(Sherwood Number)
+	sh_h = 1. + 0.619*(Re**0.412)*(sc_h)**(1./3.) !(Sherwood Number)
 	
-	h_hdom = (4*3.14*diff_h*r*sh_h) !h^-1 Kiorboe et al. 2001
+	h_hdom = (4.*3.14*diff_h*r*sh_h) !h^-1 Kiorboe et al. 2001
 
 !	active extracellular enzyme rate constant using equation 4 from Kiorboe et al. 2001
 	
-	diff_enz = ((bc*(temp+273.16))/(6*3.14*dv_sw*mr_enz))*3600	!equation 6 from Jumars et al. 1993 converted to h^-1
+	diff_enz = ((bc*(temp+273.16))/(6.*3.14*dv_sw*mr_enz))*3600.	!equation 6 from Jumars et al. 1993 converted to h^-1
 
 	sc_enz = kv/diff_enz !Schmidt Number
 	
-	sh_enz = 1 + 0.619*(Re**0.412)*(sc_enz)**(1./3.) !(Sherwood Number)
+	sh_enz = 1. + 0.619*(Re**0.412)*(sc_enz)**(1./3.) !(Sherwood Number)
 	
-	enz_edom = (4*3.14*diff_enz*r*sh_enz)  !h^-1 Kiorboe et al. 2001
+	enz_edom = (4.*3.14*diff_enz*r*sh_enz)  !h^-1 Kiorboe et al. 2001
 
 !	inactive extracellular enzyme rate constant using equation 4 from Kiorboe et al. 2001 
 	
-	denz_dedom = (4*3.14*diff_enz*r*sh_enz) !h^-1 Kiorboe et al. 2001
+	denz_dedom = (4.*3.14*diff_enz*r*sh_enz) !h^-1 Kiorboe et al. 2001
 
 ! Bacterial uptake and growth
 
@@ -745,7 +726,7 @@ END IF
 
     IF(scenario .eq. 3 .and. bacover .ge. 1)THEN
 
-        kh = 500
+        kh = 500.
 
     ENDIF
 
@@ -756,11 +737,11 @@ END IF
 
     bapop = list_ba(k)/(pnum)
 
-    IF(scenario .eq. 1 .or. scenario .eq. 4)THEN
+    IF(scenario .eq. 1 .or. scenario .eq. 2)THEN
 
         IF((bapop/quorum) .le. qthresh)THEN
 
-            epsilon = 0
+            epsilon = 0.
 
         ELSE
 
@@ -770,7 +751,7 @@ END IF
 
     ELSEIF(scenario .eq. 3)THEN  !Epsilon from Lookup Table
 
-        QfracFind = NINT((bapop/quorum)*100)
+        QfracFind = NINT((bapop/quorum)*100.)
 
         IF(QfracFind .gt. 100)THEN
 
@@ -800,7 +781,7 @@ END IF
 
             IF(Index .eq. 0)THEN
 
-                epsilon = 0
+                epsilon = 0.
 
                 !PRINT*, "No Bacteria On Particles"
 
@@ -819,7 +800,7 @@ END IF
 
 ! Bacteria detachment from particles (ranges from 0.25-0.61 h^-1) (Kiorboe et al. 2002, 2003)
 
-    IF(grow_ba .gt. 0)THEN
+    IF(grow_ba .gt. 0.)THEN
 
         IF(bapop .gt. quorum)THEN
 
@@ -833,7 +814,7 @@ END IF
 
     ELSE
 
-        max_detach = 0
+        max_detach = 0.
 
     END IF
 
@@ -844,7 +825,7 @@ END IF
 ! Extracellular enzyme halflife
 
 !	enzyme half-life
-	ehl_k = (LOG(0.5)/(tfac_hl*ehl))*(-1)
+	ehl_k = (LOG(0.5)/(tfac_hl*ehl))*(-1.)
 
 
 !------------------------
@@ -856,8 +837,8 @@ IF(k == 1) THEN
 	fpom_in = (pom_in_top)/dz
 	fba_in = ((fpom_in)/(dw*0.001*0.12))*(quorum*qfrac)	
 !	fba_in = ba_poc*fpom_in !See Table 1 in Ghighlione et al. 2009, 1E11 is attached bacteria at 150 m and 26.4 is pom at 150 m 
-	fenz_in = 0 
-	fh_in = 0
+	fenz_in = 0.
+	fh_in = 0.
 
 ELSE
 	
@@ -880,17 +861,17 @@ END IF
 !        RATES
 !------------------------
 
-	jm_ba = m_ba*list_ba(k)**2				!mortality of attached bacteria
+	jm_ba = m_ba*list_ba(k)**2.				!mortality of attached bacteria
 	jpom_dgd = pom_dgd*list_enz(k)			!degradation of pom by extracellular enzyme
     jup_ba = up_ba*list_ba(k)				!uptake by attached bacteria
 
-    IF(scenario .eq. 4)THEN
+    IF(scenario .eq. 2)THEN
 
         hdom_check = h_hdom*((list_h(k)/(Vtotal*pnum))-list_hdom(k))*pnum - up_ba*list_ba(k)	!hydrolysate flux
 
-        IF (hdom_check .lt. 0)THEN
+        IF (hdom_check .lt. 0.)THEN
 
-            jh_hdom = 0
+            jh_hdom = 0.
 
         ELSE
 
@@ -900,7 +881,7 @@ END IF
 
     ELSE
 
-        jh_hdom = (1-bacover)*h_hdom*((list_h(k)/(Vtotal*pnum))-list_hdom(k))*pnum
+        jh_hdom = (1.-bacover)*h_hdom*((list_h(k)/(Vtotal*pnum))-list_hdom(k))*pnum
 
     ENDIF
 
@@ -908,12 +889,12 @@ END IF
 	jattach = attach*list_bf(k)				!attachment rate of bacteria
 	jdetach = detach*list_ba(k)				!detachment rate of bacteria
 	jgrow_bf = grow_bf*list_bf(k)			!growth rate of free-living bacteria
-	jm_bf = m_bf*list_bf(k)**2				!mortality rate of free-living bacteria
+	jm_bf = m_bf*list_bf(k)**2.				!mortality rate of free-living bacteria
     jepsilon = epsilon*list_ba(k)			!enzyme production rate by attached bacteria
 
     IF(scenario .eq. 3)THEN
 
-    jenz_edom = (1-bacover)*enz_edom*(((list_enz(k)-list_enz(k)*(Vcarbon/Vtotal))/(Vtotal*pnum))-list_edom(k))*pnum  !active enzyme flux
+    jenz_edom = (1.-bacover)*enz_edom*(((list_enz(k)-list_enz(k)*(Vcarbon/Vtotal))/(Vtotal*pnum))-list_edom(k))*pnum  !active enzyme flux
 
     ELSE
 
@@ -928,7 +909,7 @@ END IF
 
     IF(scenario .eq. 3)THEN
 
-	jdenz_dedom = (1-bacover)*denz_dedom*((list_denz(k)/(Vtotal*pnum))-list_dedom(k))*pnum !inactive enzyme flux
+	jdenz_dedom = (1.-bacover)*denz_dedom*((list_denz(k)/(Vtotal*pnum))-list_dedom(k))*pnum !inactive enzyme flux
 
     ELSE
 
@@ -967,7 +948,7 @@ END IF
 
 	hcheck = list_h(k) + d_h
 	
-	IF(hcheck .lt. 0)THEN
+	IF(hcheck .lt. 0.)THEN
 
 	PRINT*, "efficiency used"
     PRINT *, "depth = ", depth
@@ -988,7 +969,7 @@ END IF
 
     PRiNT*, "hcheck2 = ", hcheck2
 	
-	IF(hcheck2 .lt. 0)THEN
+	IF(hcheck2 .lt. 0.)THEN
 	
 	d_h = -list_h(k)  !Fix the rounding error
 	
@@ -1029,9 +1010,9 @@ IF (k == 1) THEN
 
 	list_pomflux(k) = pom_in_top
 	list_baflux(k) = ((pom_in_top)/(dw*0.001*0.12))*(quorum*qfrac)
-    list_enzflux(k) = 0
-    list_hflux(k) = 0
-    list_denzflux(k) = 0
+    list_enzflux(k) = 0.
+    list_hflux(k) = 0.
+    list_denzflux(k) = 0.
 
 ELSE
 	
@@ -1081,7 +1062,7 @@ END IF
 	!PRINT *, "depth = ", depth
 	!PRINT*, "-----------------------------"
 
-	IF(list_pom(k) .lt. 0)THEN
+	IF(list_pom(k) .lt. 0.)THEN
 	 
 		PRINT *, "***ERROR Negative POM***"
 		PRINT *, "CountTime =", CountTime
@@ -1090,7 +1071,7 @@ END IF
 		STOP
 	END IF
 	
-	IF(list_h(k) .lt. 0)THEN
+	IF(list_h(k) .lt. 0.)THEN
 	 
 		PRINT *, "***ERROR Negative Hydrolysate***"
 		PRINT *, "CountTime =", CountTime
@@ -1101,7 +1082,7 @@ END IF
 	END IF
 	
 	
-	IF(list_ba(k) .lt. 0)THEN
+	IF(list_ba(k) .lt. 0.)THEN
 	 
 		PRINT *, "***ERROR Negative Attached Bacteria***"
 		PRINT*, "list_ba(k) = ", list_ba(k)
@@ -1112,7 +1093,7 @@ END IF
 	END IF
 
 
-    IF(Vcarbon/Vtotal .gt. 1)THEN
+    IF(Vcarbon/Vtotal .gt. 1.)THEN
 
         PRINT *, "***ERROR Carbon Volume Larger Than Particle Volume***"
         PRINT*, "Vcarbon/Vtotal = ", Vcarbon/Vtotal
@@ -1147,8 +1128,8 @@ END IF
 				list_bacover(i) 
 				8 FORMAT(I4,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5)
 		
-				WRITE(11,12) list_depth(i), list_tfacb(i), list_tfacenz(i), list_tfachl(i)
-				12 FORMAT(I4,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5)
+!				WRITE(11,12) list_depth(i), list_tfacb(i), list_tfacenz(i), list_tfachl(i)
+!				12 FORMAT(I4,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5)
 				
 		
 			END DO

@@ -16,10 +16,7 @@ for w in 2.00
 do
 for r_top in 0.0010
 do
-	rm MassTransferRates.out
-	rm StateVariables.out
-	rm BacteriaRates.out
-	rm sizesink.input
+	rm sizesink.input	
 
 	echo "&control" > sizesink.input
 	echo "w =" ${w} >> sizesink.input
@@ -31,5 +28,14 @@ do
 cp StateVariables.out ../../Output/MRM1D/StateVariables/StateVariables_Sink${w}_Size${r_top}_Qfrac${qfrac}.out
 cp BacteriaRates.out ../../Output/MRM1D/BacteriaRates/BacteriaRates_Sink${w}_Size${r_top}_Qfrac${qfrac}.out
 cp MassTransferRates.out ../../Output/MRM1D/MassTransferRates/MassTransferRates_Sink${w}_Size${r_top}_Qfrac${qfrac}.out
+
+rm MassTransferRates.out
+rm StateVariables.out
+rm BacteriaRates.out
+
 done
 done
+
+rm filename1.txt
+rm filename2.txt
+rm sizesink.input
