@@ -385,7 +385,7 @@ NAMELIST /control/ w, r_top
 !----------------------------------
 !		SCENARIO CHOICE
 !----------------------------------
-scenario = 3
+scenario = 1
 
 !scenario = 1  (Interior)
 !scenario = 2  (Interception)
@@ -411,9 +411,9 @@ q10_enz			= 2.			!
 q10_hl			= 2.			!
 !******************************************
 dz				= 10.			!m
-dt				= 0.00833		!h (1 min)
+dt				= 0.00833		!h (30 s)
 !******************************************
-w				= 2.				!m h^-1	(48 m/day)
+w				= 2.			!m h^-1	(48 m/day)
 r_top			= 0.001			!m (1 mm)
 qfrac			= 0.25			!
 !******************************************
@@ -609,8 +609,9 @@ IF (k == 1)THEN
 	
 	dw = (17.*(r*2.*1000.)**1.8)  !Iverson et al. 2010 (r*1000 is converting m to mm)
 	
-	pnum = list_pom(k)/(dw*0.001*0.12) !0.12 is the ratio of POC to dry weight (dw) from Iverson et al. 2010 (dw*0.001 is converting ug to mg)	
+	pnum = list_pom(k)/(dw*0.001*0.12) !0.12 is the ratio of POC to dry weight (dw) from Iverson et al. 2010 (dw*0.001 is converting ug to mg)
 
+PRINT*, "pnum = ", pnum
 	
 END IF
 	
