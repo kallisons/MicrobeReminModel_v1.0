@@ -91,5 +91,5 @@ Acknowledgements
 Code Release:  
 KAS was supported by the Gordon and Betty Moore Foundation, the Alfred P. Sloan Foundation, and the Washington Research Foundation through the eScience Institute at the University of Washington.
 
-Scientific Research and Code Development:
+Scientific Research and Code Development:           
 KAS was supported by the Carbon Mitigation Initiative at Princeton University which is sponsored by BP and the NOAA Cooperative Institute for Climate Science (NA08OAR4320752).
