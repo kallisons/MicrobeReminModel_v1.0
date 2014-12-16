@@ -472,7 +472,7 @@ OPEN(UNIT=4, FILE="MassTransferRates.out", STATUS='REPLACE')
 
 !**Initial particulate organic matter (POM)**
 
-    pnum = 82.
+    pnum = 84.
         !Number of particles in the shallowest box of the 1D model in steady state.
 	
     list_pom(1) = pnum*(dw*0.001*0.12)  !(Iverson et al. 2010)
