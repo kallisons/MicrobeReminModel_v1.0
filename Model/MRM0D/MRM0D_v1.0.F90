@@ -569,51 +569,39 @@ DO t = 2, finalt
 
     ENDIF
 
-! Particle degradation
-
-!	amount of pom degraded which is dependent on the amount of pom and temperature
+!**Particle degradation**
 	
 	pomp = list_pom(t-1)/(pnum*Vtotal)
-	
-	gamma = ((f_CaCO3*flux_CaCO3 + f_opal*flux_opal + f_lith*flux_lith)/24./w)!ballast scaling constant for enzyme degradation (Klaas and Archer 2002)
-	
+
+!   gamma is the ballast scaling constant for enzyme degradation (Klaas and Archer 2002).
+	gamma = ((f_CaCO3*flux_CaCO3 + f_opal*flux_opal + f_lith*flux_lith)/24./w)
+
 	gammap = gamma/(pnum*Vtotal)
-	
+
+
 	availC = (pomp-gammap)/pomp
 
 	IF (availC .lt. 0.)THEN
 	
-	availC = 0.
+        availC = 0.
 	
 	ENDIF
 	
 	pom_dgd = tfac_enz*epom*availC
 
-! Calculate Volume of Substrate Carbon Available Per Particle
-
+!   Vcarbon calculates the volume of substrate carbon available per particle.
     Vcarbon = (((list_pom(t-1)*availC)/pnum)*(Ratio_mmC))/rho_Csub
 
-! Bacteria attachment to particles
 
-!	rate constant using equation 6a from Kiorboe et al. 2002
+!   There is no bacterial attachment or detachment in the 0D model.
+	attach = 0.
 
-	D = tfac_b*((swim*swim*run)/(6.*(1.-angle)))!(Diffusivity)
-	
-	Sh = 1.+0.619*(Re**0.412)*(kv/D)**(1./3.) !(Sherwood Number)
-			
-	RW = 4.*3.14*D*r*Sh !Encounter Rate Kernel for Random Walk
+	detach = 0.
 
-	attach = 0. !RW*pnum
-	
-! Bacteria detachment from particles
-	
-	k_detach = (quorum)
-	
-	detach = 0. !max_detach*(bapop/(k_detach+bapop))
 
-! Hydrolysate and extracellular enzyme leaving sinking pom
+!**Mass transfer of hydrolysate and extracellular enzyme from particles**
 
-!	hydrolysate rate constant using equation 4 from Kiorboe et al. 2001
+!	The hydrolysate rate constant using equation 4 from Kiorboe et al. 2001
 
 	diff_h = ((bc*(temp+273.16))/(6.*3.14*dv_sw*mr_h))*3600.	!equation 6 from Jumars et al. 1993 converted to h^-1
 	
@@ -643,7 +631,6 @@ DO t = 2, finalt
 
     up_bf = tfac_b*up_max_bf*(list_hdom(t-1)/(kdom+list_hdom(t-1)))
 
-
     hp = list_h(t-1)/(pnum*Vtotal)
 
     up_ba = tfac_b*up_max_ba*(hp/(kh+hp))
@@ -669,19 +656,19 @@ DO t = 2, finalt
 !        FLUXES
 !------------------------
 
-!Sinking Rates In
-	fpom_in = 0. !pom_in_top/dz
-	fba_in = 0. !ba_poc*fpom_in !See Table 1 in Ghighlione et al. 2009, 1E11 is attached bacteria at 150 m and 26.4 is pom at 150 m
+!Sinking Rates In - No sinking fluxes in 0D
+	fpom_in = 0.
+	fba_in = 0.
 	fenz_in = 0.
 	fh_in = 0.
 	fdenz_in = 0.
 
-!Sinking Rates Out
-	fpom_out = 0. !(w*list_pom(t-1))/dz			!pom loss to sinking
-	fenz_out = 0. !(w*list_enz(t-1))/dz			!enz loss to sinking
-	fh_out = 0. !(w*list_h(t-1))/dz				!h loss to sinking
-	fba_out = 0. !(w*list_ba(t-1))/dz				!ba loss to sinking
-	fdenz_out = 0. !(w*list_denz(t-1))/dz			!dead enzyme loss to sinking
+!Sinking Rates Out - No sinking fluxes in 0D
+	fpom_out = 0.
+	fenz_out = 0.
+	fh_out = 0.
+	fba_out = 0.
+	fdenz_out = 0.
 
 !------------------------
 !        RATES
