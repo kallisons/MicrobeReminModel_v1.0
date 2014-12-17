@@ -380,12 +380,12 @@ IMPLICIT NONE
 !			NAMELIST
 !----------------------------------
 
-NAMELIST /control/ w, r_top
+NAMELIST /control/ w, r_top, qfrac
 
 !----------------------------------
 !		SCENARIO CHOICE
 !----------------------------------
-scenario = 1
+scenario = 2
 
 !scenario = 1  (Interior)
 !scenario = 2  (Interception)
@@ -415,7 +415,7 @@ dt				= 0.00833		!h (30 s)
 !******************************************
 w				= 2.			!m h^-1	(48 m/day)
 r_top			= 0.001			!m (1 mm)
-qfrac			= 0.25			!
+qfrac			= 0.50			!
 !******************************************
 up_max_bf		= 0.25			!h^-1
 up_max_ba		= 0.25			!h^-1
@@ -445,9 +445,9 @@ flux_lith		= 6.77			!mg lith m^-2 d^-1 (Conte et al. 2001)
 !******************************************
 bc				= 1.38E-23		!m^2 kg s^-2 K^-1
 !******************************************
-cperb			= 5.0E-12			!mg C (bacteria)^-1
-bdiam			= 5.0E-7			!m (Kirchman 2012)
-blength			= 1.0E-6			!m (Kirchman 2012)
+cperb			= 5.0E-12		!mg C (bacteria)^-1
+bdiam			= 5.0E-7		!m (Kirchman 2012)
+blength			= 1.0E-6		!m (Kirchman 2012)
 !******************************************
 tt				= 5.			!years (Abell et al. 2000)
 tt_dedom		= 5.			!years
@@ -505,6 +505,7 @@ CLOSE(59)
 OPEN(UNIT=1, FILE=TimeForce, STATUS='OLD', IOSTAT=OpenStatus1)
 IF (OpenStatus1 > 0) STOP "*** Cannot open the file ***"
 
+
 !----------------------------------
 !       MAKE OUTPUT FILES
 !----------------------------------
@@ -512,7 +513,6 @@ IF (OpenStatus1 > 0) STOP "*** Cannot open the file ***"
 OPEN(UNIT=2, FILE="StateVariables.out", STATUS='REPLACE')
 OPEN(UNIT=3, FILE="BacteriaRates.out", STATUS='REPLACE')
 OPEN(UNIT=4, FILE="MassTransferRates.out", STATUS='REPLACE')
-!OPEN(UNIT=11, FILE="TemperatureScaling.out", STATUS='REPLACE')
 
 	
 !----------------------------------
@@ -610,8 +610,6 @@ IF (k == 1)THEN
 	dw = (17.*(r*2.*1000.)**1.8)  !Iverson et al. 2010 (r*1000 is converting m to mm)
 	
 	pnum = list_pom(k)/(dw*0.001*0.12) !0.12 is the ratio of POC to dry weight (dw) from Iverson et al. 2010 (dw*0.001 is converting ug to mg)
-
-PRINT*, "pnum = ", pnum
 	
 END IF
 	
