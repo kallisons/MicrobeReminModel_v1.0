@@ -9,9 +9,9 @@ IMPLICIT NONE
 !   SCENARIO
 !
 !       scenario:       choices are:
-!                       (1) Interior - bacterial uptake is separate from diffusive flux from particle
-!                       (2) Interception - bacterial uptake is from the diffusive flux from particle
-!                       (3) Retention - exoenzyme and hydrolysate flux is stopped by attached bacteria
+!                       (1) Interior - bacterial uptake is separate from diffusive flux from particles
+!                       (2) Interception - bacterial uptake is from the diffusive flux from particles
+!                       (3) Retention - exoenzyme and hydrolysate flux is stopped by particle-attached bacteria
 !
 !   FLUX IN
 !
