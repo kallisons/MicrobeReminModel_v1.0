@@ -16,7 +16,8 @@ R version 3.1.2: [http://www.r-project.org/](http://www.r-project.org/)
 ---------
 Folders
 ---------
-**Graphs** -  Graphs of the model output plotted using R are saved to this folder.  
+**Graphs** -  Graphs of the model output plotted using R are saved to this folder.
+
 **Input** -  The 1-dimensional (MRM1D) configuration of the model requires two input files with environmental data. One input file has particulate organic carbon flux at the base of the euphotic zone for each time step. Another input file has a long-term average vertical profiles of temperature, salinity, density, and semi-labile dissolved organic carbon.  
 
 **Model** -  This folder contains 0-dimensional (MRM0D) and 1-dimensional (MRM1D) configurations of the Microbial Remineralization Model v1.0.
@@ -25,7 +26,7 @@ Folders
 
 **RCode** - The R code files to format the input data (DatatoInput folder) and analyze output (Analysis folder) and generate figures (Figures folder) are contained in this folder.
 
-**TestFiles** - Contains test files to verify the example output was generated correctly by the model and R scripts.  
+**TestFiles** - Contains test files to verify the example output was generated correctly by the model.  
 
 ---------------------
 Configurations
@@ -64,6 +65,8 @@ Command to compile model:
 ------------------
 Running the model
 ------------------
+The model is run using shell scripts.
+
 **0-dimensional configuration:**
 
 Change directory:  
@@ -84,6 +87,7 @@ Command to run model:
 
     sh RunModel_BATS_MRM1D.sh
 
+MRM1D is set to run for 15 days for the tests of the model output to decrease the time required to perform functionality tests.  The model needs to be run for 180 days to reach steady state.  The number of time intervals can be changed in the PRINT FINAL OUTPUT TO FILES section towards the bottom of the MRM1D_v1.0.F90 file.
 
 ----------------------------
 Test model output
@@ -102,15 +106,18 @@ Command to run comparison tests:
 
     sh RunTest_BATS_MRM1D_Output.sh
 
+-------------------
+Changing scenarios
+-------------------
+    The interior, interception, and retention scenarios.
+
+
+
 --------------------------------
 Exoenzyme optimization analysis
 --------------------------------
 
 
--------------------
-Changing scenarios
--------------------
-The interior, interception, and retention scenarios.
 
 
 ------------------
