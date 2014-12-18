@@ -16,10 +16,7 @@ R version 3.1.2: [http://www.r-project.org/](http://www.r-project.org/)
 ---------
 Folders
 ---------
-**Data** -  The model uses data from the Bermuda Atlantic Time Series (BATS).  Data downloaded from the [BATS](http://bats.bios.edu/) website is in this folder.  
-
 **Graphs** -  Graphs of the model output plotted using R are saved to this folder.  
-
 **Input** -  The 1-dimensional (MRM1D) configuration of the model requires two input files with environmental data. One input file has particulate organic carbon flux at the base of the euphotic zone for each time step. Another input file has a long-term average vertical profiles of temperature, salinity, density, and semi-labile dissolved organic carbon.  
 
 **Model** -  This folder contains 0-dimensional (MRM0D) and 1-dimensional (MRM1D) configurations of the Microbial Remineralization Model v1.0.
@@ -29,6 +26,13 @@ Folders
 **RCode** - The R code files to format the input data (DatatoInput folder) and analyze output (Analysis folder) and generate figures (Figures folder) are contained in this folder.
 
 **TestFiles** - Contains test files to verify the example output was generated correctly by the model and R scripts.  
+
+---------------------
+Configurations
+---------------------
+**0-dimensional configuration:**  The 0D configuration of the Microbial Remineralization Model was developed to determine the effect of exoenzyme production on the growth of bacteria on particles.  This model was derived from the 1D configuration and used to determine optimal exoenzyme production.
+
+**1-dimensional configuration:**  The 1D configuration of the Microbial Remineralization Model was developed to determine the effect of particle-attached bacteria on particle decomposition and remineralization in the deep ocean water column.  The depth range of the model is from 150 to 4000 m.  
 
 ---------------------
 Compiling the model
