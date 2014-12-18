@@ -1,159 +1,162 @@
 PROGRAM MAIN
 IMPLICIT NONE
-!		"model of particle remineralization that includes bacterial 
-!       extracellular enzyme dynamics" 
+!		"1D model of of sinking particle remineralization in the ocean water column that includes bacterial dynamics"
 !
 !----------------------------------
 !  DESCRIPTION OF VARIABLES
 !----------------------------------
 !
-!   	FLUX IN         
+!   SCENARIO
 !
-!			jday:			julian day
+!       scenario:       choices are:
+!                       (1) Interior - bacterial uptake is separate from diffusive flux from particle
+!                       (2) Interception - bacterial uptake is from the diffusive flux from particle
+!                       (3) Retention - exoenzyme and hydrolysate flux is stopped by attached bacteria
+!
+!   FLUX IN
+!
+!		jday:			julian day
 !				
-!			hhmm:			hour, minute 
+!		hhmm:			hour, minute
 !				
-!			pom_in_top:		particle flux at upper boundary (mg C m^-2)
+!		pom_in_top:		particle flux at upper boundary (mg C m^-2)
 !
 !
-!   	WATER COLUMN PROFILE
+!   WATER COLUMN PROFILE
 !
-!			depth:			depth in the water column
+!		depth:			depth in the water column
 !
-!			temp:			temperature of seawater (°C)
+!		temp:			temperature of seawater (°C)
 !
-!			s:				salinity of seawater (psu)
+!		s:				salinity of seawater (psu)
 !
-!			rho:			density of seawater (kg m^-3)
+!		rho:			density of seawater (kg m^-3)
 !  
-!			sldoc:			semi-labile dissolved organic carbon (mg C m^-3)
+!		sldoc:			semi-labile dissolved organic carbon (mg C m^-3)
+!
+!
+!	TIME AND SPACE
+!
+!		dz:				depth interval (m)
+!
+!       k:              depth iteration
+!
+!		dt:				time step (h)
+!
+!       t:              time iteration
 !
 !               
-!       INITIAL STATE VARIABLES
+!   STATE VARIABLES
 !              
-!           hdom:			hydrolysate dissolved organic matter (mg C m^-3)
+!       hdom:			hydrolysate dissolved organic matter (mg C m^-3)
 !           
-!           pom:			particulate organic matter (mg C m^-3)
+!       pom:			particulate organic matter (mg C m^-3)
 !                       
-!           bf:				free living bacteria (mg C m^-3)
+!       bf:				free living bacteria (mg C m^-3)
 !
-!           ba:				attached bacteria (mg C m^-3)
+!       ba:				attached bacteria (mg C m^-3)
 !
-!           enz:			enzyme in particle (mg C m^-3)
+!       enz:			exoenzyme in particle (mg C m^-3)
 !	
-!           h:				hydrolysate in particle (mg C m^-3)
+!       h:				hydrolysate in particle (mg C m^-3)
 !
-!           denz:			inactive enzyme in particle (mg C m^-3)
+!       denz:			inactive exoenzyme in particle (mg C m^-3)
 !
-!			edom:			active enzyme in dissolved environment (mg C m^-3)
+!       edom:			active exoenzyme in dissolved environment (mg C m^-3)
 !
-!			dedom:			inactive enzyme in dissolved environment (mg C m^-3)
+!       dedom:			inactive exoenzyme in dissolved environment (mg C m^-3)
 !
 !
-!       TEMPERATURE DEPENDENCE
+!   TEMPERATURE DEPENDENCE
 !
-!           q10_b:			q10 value for bacterial temperature dependence.
+!       q10_b:			q10 value for bacterial temperature dependence.
 !							
-!           q10_enz:		q10 value for enzyme activity rate.
+!       q10_enz:		q10 value for exoenzyme activity rate.
 !		
-!			q10_hl:			q10 value for enzyme half life.  
+!       q10_hl:			q10 value for exoenzyme half-life.
 !
 !
-!		WATER COLUMN PROPERTIES
-!				
-!			dz:				depth interval (m)
-!				
-!			dt:				time step (h)
+!   PARTICULATE ORGANIC MATTER PARAMETERS
+!
+!       w:				sinking speed of the particles (m h^-1)
+!
+!       r_top:			radius of the particle at the upper boundary (m)
 !
 !
-!		PARTICLE PROPERTIES
+!   BACTERIA PARAMETERS
 !
-!			w:				sinking speed of the particles (m h^-1)
+!       up_max_bf:		maximum free-living bacteria uptake rate at 20°C (h^-1)
 !
-!			r_top:			radius of the particle at the upper boundary (m)
-!
-!			ba_poc:			ratio of ba to pom at upper boundary (Ghiglione et al. 2009)
-!
-!
-!       BACTERIA PARAMETERS
-!
-!           up_max_bf:		maximum free-living bacteria uptake rate at 20°C (h^-1)
-!
-!           up_max_ba:		maximum attached bacteria uptake rate at 20°C (h^-1)
+!       up_max_ba:		maximum attached bacteria uptake rate at 20°C (h^-1)
 !							
-!           kh:				half saturation constant for attached bacterial uptake of hydrolysate (mg C m^-3 particle)
+!       kh:				half-saturation constant for attached bacterial uptake of hydrolysate (mg C m^-3 particle)
 !
-!           kdom:			half saturation constant for free-living bacterial uptake of dissolved hydrolysate (mg C m^-3 seawater)
+!       kdom:			half-saturation constant for free-living bacterial uptake of dissolved hydrolysate (mg C m^-3 seawater)
 !
-!           bge_max:		maximum bacterial growth efficiency (Fig. 3, "Estuary", Del Giorgio and Cole 2000)
+!       bge_max:		maximum bacterial growth efficiency (Fig. 3, Del Giorgio and Cole 2000)
 !
-!			basal:			basal energetic cost at 20°C (h^-1) (based on the 0.01 day^-1 at 0°C from COBALT v1, Stock et al. in prep)
+!       basal:			basal energetic cost at 20°C (h^-1) (based on the 0.01 day^-1 at 0°C from COBALT v1, Stock et al. in prep)
 !		
-!			quorum:			bacterial biomass at quorum sensing threshold (mg C m^-3 particle) 
-!							**converted from 5E7 CFU (colony-forming units = active bacteria cells) mL^-1 (Gram et al. 2002)
-!				
-!			x:				exponent for slope of the quorum threshold response
+!       quorum:			bacterial biomass at quorum sensing threshold (mg C m^-3 particle)
+!		
+!       qfrac:          fraction of the surface area of the particle covered by particle-attached bacteria
 !
-!			max_epsilon:	maximum enzyme production rate (h^-1)
+!       x:				exponent for slope of the quorum threshold response
 !
-!			m_bf:			mortality free-living bacteria (h^-1)
+!       max_epsilon:	maximum exoenzyme production rate (h^-1)
 !
-!			m_ba:			mortality of attached bacteria (h^-1)
+!       m_bf:			mortality free-living bacteria (h^-1)
+!
+!       m_ba:			mortality of attached bacteria (h^-1)
 !	
-!			swim:			swimming velocity of bacteria (m h^-1) (Kiorboe et al. 2002)
+!       cperb:          mg carbon per bacteria (mg C (bacteria)^-1)
 !
-!			run:			time of bacterial swimming interval (h) (Kiorboe et al. 2002)
+!       bdiam:          diameter of a rod-shaped bacteria (m)
 !
-!			angle:			angle between bacteria runs (cosine of angle)
-!	
-!			max_detach:		maximum detachment rate (h^-1) (Kiorboe et al. 2002, 2003)
-!								**observations of antagonistic interactions (Long and Azam 2001)
+!       blength:        length of a rod-shaped bacteria (m)
+!
+!       swim:			swimming velocity of bacteria (m h^-1) (Kiorboe et al. 2002)
+!
+!       run:			time of bacterial swimming interval (h) (Kiorboe et al. 2002)
+!
+!       angle:			angle between bacteria runs (cosine of angle) (Kiorboe et al. 2002)
 !
 !
-!       ENZYME PARAMETERS
+!   EXOENZYME PARAMETERS
 !
-!			ehl				half life of the enzyme at 7°C (h)	(Steen and Arnosti 2011)
+!       ehl:            half-life of exoenzyme activity (h)	(Steen and Arnosti 2011)
 !
-!			epom			maximum degradation rate of the particle by extracellular enzyme at 7°C 
-!							(mg C particle (mg C extracellular enzyme)^-1) (Steen and Arnosti 2011)
+!       epom:           maximum exoenzyme activity rate (mg C particle (mg C exoenzyme)^-1) (Steen and Arnosti 2011)
 !
-!			f_CaCO3			calcium carbonate ballast preservation fraction mg C (mg CaCO3)^-1 (Klaas and Archer 2002)
+!       f_CaCO3:        calcium carbonate ballast preservation fraction mg C (mg CaCO3)^-1 (Klaas and Archer 2002)
 !
-!			f_opal			opal ballast preservation fraction mg C (mg opal)^-1 (Klaas and Archer 2002)
+!       f_opal:         opal ballast preservation fraction mg C (mg opal)^-1 (Klaas and Archer 2002)
 !
-!			f_lith			lithogenic material ballast preservation fraction mg C (mg lithogenic)^-1 (Klaas and Archer 2002)
-!			
-!			flux_CaCO3		flux of calcium carbonate (mg CaCO3 m^-2 d^-1)
+!       f_lith:         lithogenic material ballast preservation fraction mg C (mg lithogenic)^-1 (Klaas and Archer 2002)
 !
-!			flux_opal		flux of opal (mg opal m^-2 d^-1)
+!       flux_CaCO3:     flux of calcium carbonate (mg CaCO3 m^-2 d^-1)
 !
-!			flux_lith		flux of lithogenic material (mg lithogenic m^-2 d^-1)
+!		flux_opal:      flux of opal (mg opal m^-2 d^-1)
+!
+!		flux_lith:      flux of lithogenic material (mg lithogenic m^-2 d^-1)
 !               
 !               
-!		DIFFUSION PARAMETERS
+!   DIFFUSION PARAMETERS
 !
-!			bc				Boltzmann constant (m^2 kg s^-2 K^-1)
+!		bc:             Boltzmann constant (m^2 kg s^-2 K^-1)
 !
-!			mr_enz			molecular radius of a beta-glucosidase molecule (m) (Jeng et al. 2010)
+!		mr_enz:         molecular radius of a exoenzyme leucine aminopeptidase molecule (m)
 !
-!			mr_h			molecular radius of a glucose molecule (m) (Pappenheimer et al. 1951)
+!		mr_h:           molecular radius of a hydrolysate leucine molecule (m)
+!
+!       rho_Csub:       density of leucine (mg m^-3)
+!
+!       Ratio_mmC:      ratio of molar mass Leucine to molar mass of carbon in Leucine (dimensionless)
 !
 !
-!       POM PARAMETERS
+!   DOM PARAMETERS
 !   
-!           epom:		rate of pom degradation through extracellular 
-!							enzyme hydrolysis (per hr)
-!
-!           mr_h:		molecular radius of the hydrolysate
-!
-!           r:			characteristic radius of a particle in m
-!
-!			w:			flux rate of POM in m/hr
-!
-!
-!       DOM PARAMETERS
-!   
-!           tt:		turnover time in years of semi-labile dom into labile dom (hdom)
+!       tt:             turnover time in years of semi-labile dom into labile dom (hdom)
 !							
 !
 !	
@@ -179,7 +182,6 @@ IMPLICIT NONE
 	REAL::	dt
 	REAL::	w
 	REAL::	r_top
-!	REAL::	ba_poc
 	REAL::	up_max_bf
 	REAL::	up_max_ba
 	REAL::	kh
@@ -326,8 +328,6 @@ IMPLICIT NONE
 	REAL::	jpom_dgd
 	REAL::	jh_hdom
 	REAL::	jup_ba
-	REAL::  hdiff
-	REAL::  hplus
 	REAL::	jgrow_ba
 	REAL::	jattach
 	REAL::	jdetach
@@ -356,7 +356,6 @@ IMPLICIT NONE
     REAL::  hdom_check
 	REAL::  hcheck
 	REAL::  hcheck2
-	REAL::  qtest
 	REAL::  flusht
 	REAL::  qfrac
 	REAL::  tt_dedom
@@ -368,13 +367,10 @@ IMPLICIT NONE
     REAL::  qxfit
     INTEGER::  scenario
     REAL::  havail
-    REAL::  avar
-    REAL::  bvar
-    REAL::  xtop
-    REAL::  width
     REAL::  Ratio_mmC
     INTEGER:: QfracFind
     INTEGER:: Index
+    REAL:: Days
 
 !----------------------------------
 !			NAMELIST
@@ -385,6 +381,7 @@ NAMELIST /control/ w, r_top, qfrac
 !----------------------------------
 !		SCENARIO CHOICE
 !----------------------------------
+
 scenario = 2
 
 !scenario = 1  (Interior)
@@ -412,10 +409,6 @@ q10_hl			= 2.			!
 !******************************************
 dz				= 10.			!m
 dt				= 0.00833		!h (30 s)
-!******************************************
-w				= 2.			!m h^-1	(48 m/day)
-r_top			= 0.001			!m (1 mm)
-qfrac			= 0.50			!
 !******************************************
 up_max_bf		= 0.25			!h^-1
 up_max_ba		= 0.25			!h^-1
@@ -452,10 +445,17 @@ blength			= 1.0E-6		!m (Kirchman 2012)
 tt				= 5.			!years (Abell et al. 2000)
 tt_dedom		= 5.			!years
 !******************************************
+!w				= 2.			!set in namelist
+!r_top			= 0.001			!set in namelist
+!qfrac			= 0.50			!set in namelist
+!******************************************
+
 
 !----------------------------------
 !   SCENARIO SPECIFIC PARAMETERS
 !----------------------------------
+
+!**Exoenzyme production parameters for scenario 1 (Interior)**
 
 IF(scenario .eq. 1)THEN
 max_epsilon     = 0.027
@@ -464,6 +464,9 @@ qthresh         = 0.37          !fractional particle coverage
 qxfit           = 1.42          !exponent for quorum sensing equation
 ENDIF
 
+
+!**Exoenzyme production parameters for scenario 2 (Interception)**
+
 IF(scenario .eq. 2)THEN
 max_epsilon     = 0.025
 qk              = 0.43          !fractional particle coverage
@@ -471,7 +474,8 @@ qthresh         = 0.31          !fractional particle coverage
 qxfit           = 1.44          !exponent for quorum sensing equation
 ENDIF
 
-!The enzyme production for scenario 3 (Retention) is determined using a look-up table.
+
+!**Exoenzyme production from lookup table for scenario 3 (Retention)**
 
 IF(scenario .eq. 3)THEN
 OPEN(60, FILE = 'RetentionEpsilon.txt')
@@ -483,6 +487,7 @@ ENDDO
 CLOSE(60)
 ENDIF
 
+
 !----------------------------------
 !		NAMELIST PARAMETERS
 !----------------------------------
@@ -491,6 +496,7 @@ READ (5, control) !	Read in the namelist
 WRITE (6, control)
 PRINT *, "------------------------------------"
 PRINT*, "Scenario choice = ", scenario
+
 
 !----------------------------------
 !     READ IN FORCING FILES
@@ -529,6 +535,10 @@ OPEN(UNIT=4, FILE="MassTransferRates.out", STATUS='REPLACE')
 	list_dedom = dedom_initial
 
 
+!------------------
+!  START TIME LOOP
+!------------------
+
 CountTime = 1
 
 DO
@@ -537,7 +547,7 @@ DO
 ! PARTICLE FLUX AT UPPER BOUNDARY
 !----------------------------------
 
-READ(1, *, IOSTAT = inputstatus1) jday, hhmm, ss, pom_in_top  !pom_in_top is in units of mg m^-2
+READ(1, *, IOSTAT = inputstatus1) jday, hhmm, ss, pom_in_top
 
 IF (inputstatus1 > 0) STOP "*** Input error ***"
 IF (inputstatus1 < 0) EXIT 
@@ -547,14 +557,18 @@ OPEN(UNIT=10, FILE=DepthForce, STATUS='OLD', IOSTAT=OpenStatus10)
 IF (OpenStatus10 > 0) STOP "*** Cannot open the file ***"
 
 
+!------------------
+!  START DEPTH LOOP
+!------------------
+
 k = 1
 
 DO 
 
+
 !----------------------------
 !  WATER COLUMN PROFILE
 !----------------------------
-
 
 READ(10, *, IOSTAT = inputstatus10) depth, temp, s, rho, sldoc 
 
@@ -562,17 +576,16 @@ IF (inputstatus10 > 0) STOP "*** Input error ***"
 IF (inputstatus10 < 0) EXIT 
 
 
-! Calculate the amount of semi-labile doc converted to labile doc per time step
+!**Decay of semi-labile to labile DOC per time step**
 
 	decayK = (1./(tt*24.*365.))
 	
 	decayK2 = (1./(tt_dedom*24.*365.))
 
+
 !----------------------------
 !  TEMPERATURE DEPENDENCE
-!----------------------------	
-
-! Calculate temperature scaling for each rate
+!----------------------------
 	
     tfac_b =	q10_b**((temp-20.)/10.)
 
@@ -584,18 +597,22 @@ IF (inputstatus10 < 0) EXIT
 !  SEAWATER CHARACTERISTICS
 !----------------------------	
 
-! Calculate dynamic viscosity and kinematic viscosity of seawater (equations A1, A7, A8, A9, A10 from Jumars et al. 1993)
+!**Calculate dynamic viscosity**
 	
-	E = 0.0001068 + 0.00005185*temp	!A8
+	E = 0.0001068 + 0.00005185*temp	!(A8, Jumars et al. 1993)
 	
-	F = 0.002591 + 0.000033*temp	!A9
+	F = 0.002591 + 0.000033*temp	!(A9, Jumars et al. 1993)
 	
-	Clv = ((rho/1000.)*s)/1.80655	!A10  density converted to g cm**-3
+	Clv = ((rho/1000.)*s)/1.80655	!(A10, Jumars et al. 1993)
+        !density converted to g cm**-3
 	
-	dv_fw = (10.**((-157.095 - 3.09695*temp - 0.001827*temp**2.)/(89.93+temp))) !A1
+	dv_fw = (10.**((-157.095 - 3.09695*temp - 0.001827*temp**2.)/(89.93+temp))) !(A1, Jumars et al. 1993)
 	
-	dv_sw = (dv_fw * (1. + E*SQRT(Clv) + F*Clv))*0.1	!A7 dynamic viscosity in kg m^-1 s^-1
-	
+	dv_sw = (dv_fw * (1. + E*SQRT(Clv) + F*Clv))*0.1	!(A7, Jumars et al. 1993)
+
+
+!**Calculate kinematic viscosity**
+
 	kv = (dv_sw/rho)*3600. !kinematic viscosity in m^2 h^-1
 
 
@@ -604,31 +621,47 @@ IF (inputstatus10 < 0) EXIT
 !----------------------------	
 
 IF (k == 1)THEN
-	
+
+!**Particle radius**
+
 	r = r_top
+
+
+!**Particle dry weight**
 	
 	dw = (17.*(r*2.*1000.)**1.8)  !Iverson et al. 2010 (r*1000 is converting m to mm)
+
+
+!**Initial particulate number**
 	
-	pnum = list_pom(k)/(dw*0.001*0.12) !0.12 is the ratio of POC to dry weight (dw) from Iverson et al. 2010 (dw*0.001 is converting ug to mg)
+    pnum = list_pom(k)/(dw*0.001*0.12) !(Iverson et al. 2010)
+        !0.12 is the ratio of POC to dry weight (dw)
+        !dw*0.001 is converting ug to mg
+
 	
 END IF
 	
-!Calculate particle volume in order to scale the constants for quorum sensing and hydrolysate uptake
+!**Particle volume**
 
 	Vtotal = (4./3.)*3.14*r**3.
 
-! Reynolds Number of a particle
+
+!**Reynolds Number of a particle**
 
 	Re = (w*r)/kv
 
-! Calculation of Quorum Threshold  (Gram et al. 2002)
 
-    quorum = ((4.*3.14*r**2.)/(bdiam*blength))*cperb  ! mg C particle^-1  One layer of bacteria covering the particle
+!**Quorum-sensing threshold**
+
+    quorum = ((4.*3.14*r**2.)/(bdiam*blength))*cperb  ! mg C particle^-1
+        !One layer of bacteria covering the surface area spherical particle
+
 
 !------------------------
 !    RATE CONSTANTS
 !------------------------		
-! Calculate attached bacteria covering the surface area of a particle
+
+!**Fraction of particle surface area covered by attached bacteria**
 
     IF(scenario .eq. 3)THEN
 
@@ -646,15 +679,11 @@ END IF
     ENDIF
 
 
-! Particle degradation
-
-!	amount of pom degraded which is dependent on the amount of pom and temperature
+!**Particle degradation**
 	
 	pomp = list_pom(k)/(pnum*Vtotal)
 
-	gamma = ((f_CaCO3*flux_CaCO3 + f_opal*flux_opal + f_lith*flux_lith)/24./w)!ballast scaling constant for enzyme degradation (Klaas and Archer 2002)
-
-    !PRINT*, "gamma = ", gamma
+	gamma = ((f_CaCO3*flux_CaCO3 + f_opal*flux_opal + f_lith*flux_lith)/24./w)!(Klaas and Archer 2002)
 
 	gammap = gamma/(pnum*Vtotal)
 	
@@ -669,74 +698,66 @@ END IF
 	pom_dgd = tfac_enz*epom*availC
 
 
-! Calculate Volume of Substrate Carbon Available Per Particle
+!**Volume of substrate carbon available per particle**
 
     Vcarbon = (((list_pom(k)*availC)/pnum)*Ratio_mmC)/rho_Csub
 
-! Bacteria attachment to particles
 
-!	rate constant using equation 6a from Kiorboe et al. 2002
+!**Bacterial attachment to particles**
 
 	D = tfac_b*((swim*swim*run)/(6.*(1.-angle)))!(Diffusivity)
 	
-	Sh = 1.+0.619*(Re**0.412)*(kv/D)**(1./3.) !(Sherwood Number)
+	Sh = 1.+0.619*(Re**0.412)*(kv/D)**(1./3.) !Sherwood Number
 			
-	RW = 4.*3.14*D*r*Sh !Encounter Rate Kernel for Random Walk
+	RW = 4.*3.14*D*r*Sh !(Equation 6a, Kiorboe et al. 2002)
 
 	attach = RW*pnum
-	
-! Hydrolysate and extracellular enzyme leaving sinking pom
 
-!	hyrolysate rate constant using equation 4 from Kiorboe et al. 2001
 
-	diff_h = ((bc*(temp+273.16))/(6.*3.14*dv_sw*mr_h))*3600.	!equation 6 from Jumars et al. 1993 converted to h^-1
+!**Mass transfer of hydrolysate from particles**
+
+	diff_h = ((bc*(temp+273.16))/(6.*3.14*dv_sw*mr_h))*3600. !h^-1 (Equation 6, Jumars et al. 1993)
 	
 	sc_h = kv/diff_h !Schmidt Number
 	
-	sh_h = 1. + 0.619*(Re**0.412)*(sc_h)**(1./3.) !(Sherwood Number)
+	sh_h = 1. + 0.619*(Re**0.412)*(sc_h)**(1./3.) !Sherwood Number
 	
-	h_hdom = (4.*3.14*diff_h*r*sh_h) !h^-1 Kiorboe et al. 2001
+	h_hdom = (4.*3.14*diff_h*r*sh_h) !h^-1 (Equation 4, Kiorboe et al. 2001)
 
-!	active extracellular enzyme rate constant using equation 4 from Kiorboe et al. 2001
+
+!**Mass transfer of exoenzymes (active and inactive) from particles**
 	
-	diff_enz = ((bc*(temp+273.16))/(6.*3.14*dv_sw*mr_enz))*3600.	!equation 6 from Jumars et al. 1993 converted to h^-1
+	diff_enz = ((bc*(temp+273.16))/(6.*3.14*dv_sw*mr_enz))*3600.  !h^-1 (Equation 6, Jumars et al. 1993)
 
 	sc_enz = kv/diff_enz !Schmidt Number
 	
-	sh_enz = 1. + 0.619*(Re**0.412)*(sc_enz)**(1./3.) !(Sherwood Number)
+	sh_enz = 1. + 0.619*(Re**0.412)*(sc_enz)**(1./3.) !Sherwood Number
 	
-	enz_edom = (4.*3.14*diff_enz*r*sh_enz)  !h^-1 Kiorboe et al. 2001
-
-!	inactive extracellular enzyme rate constant using equation 4 from Kiorboe et al. 2001 
+	enz_edom = (4.*3.14*diff_enz*r*sh_enz)  !h^-1 (Equation 4, Kiorboe et al. 2001)
 	
-	denz_dedom = (4.*3.14*diff_enz*r*sh_enz) !h^-1 Kiorboe et al. 2001
-
-! Bacterial uptake and growth
-
-!	uptake rate constant of free-living bacteria which is dependent on the amount of dom available and temperature
-
-    up_bf = tfac_b*up_max_bf*(list_hdom(k)/(kdom+list_hdom(k)))
+	denz_dedom = (4.*3.14*diff_enz*r*sh_enz) !h^-1 (Equation 4, Kiorboe et al. 2001)
 
 
-!	uptake rate constant of attached bacteria which is dependent on the amount of hydrolysate available and temperature
+!**Bacterial uptake**
+
+    up_bf = tfac_b*up_max_bf*(list_hdom(k)/(kdom+list_hdom(k))) !free-living bacterial uptake
 
     hp = list_h(k)/(pnum*Vtotal)
 
-
     IF(scenario .eq. 3 .and. bacover .ge. 1)THEN
 
-        kh = 500.
+        kh = 500.  !higher kh because no hydrolysate is fluxing out of the particle
 
     ENDIF
 
-    up_ba = tfac_b*up_max_ba*(hp/(kh+hp))
+    up_ba = tfac_b*up_max_ba*(hp/(kh+hp)) !particle-attached bacterial uptake
 
 
-!  Enzyme production constant dependent on ba biomass per particle - quorum sensing
+!**Exoenzyme production constant dependent on attached bacteria per particle**
 
     bapop = list_ba(k)/(pnum)
 
-    IF(scenario .eq. 1 .or. scenario .eq. 2)THEN
+    IF(scenario .eq. 1 .or. scenario .eq. 2)THEN !Exoenzyme production from equation
 
         IF((bapop/quorum) .le. qthresh)THEN
 
@@ -748,11 +769,11 @@ END IF
 
         ENDIF
 
-    ELSEIF(scenario .eq. 3)THEN  !Epsilon from Lookup Table
+    ELSEIF(scenario .eq. 3)THEN  !Exoenzyme production from lookup table
 
         QfracFind = NINT((bapop/quorum)*100.)
 
-        IF(QfracFind .gt. 100)THEN
+        IF(QfracFind .gt. 100.)THEN
 
             epsilon = 0.0065
 
@@ -782,8 +803,6 @@ END IF
 
                 epsilon = 0.
 
-                !PRINT*, "No Bacteria On Particles"
-
             ENDIF
 
         ENDIF
@@ -791,17 +810,18 @@ END IF
     ENDIF
 
 
-! Calculate bacteria growth rate constants
+!**Bacterial growth**
 
-    grow_bf = (bge_max)*up_bf - tfac_b*basal
+grow_bf = (bge_max)*up_bf - tfac_b*basal  !free-living bacterial growth
 
-    grow_ba = (bge_max)*up_ba - tfac_b*basal - epsilon
+grow_ba = (bge_max)*up_ba - tfac_b*basal - epsilon !particle-attached bacterial growth
 
-! Bacteria detachment from particles (ranges from 0.25-0.61 h^-1) (Kiorboe et al. 2002, 2003)
+
+!**Bacterial detachment from particles**
 
     IF(grow_ba .gt. 0.)THEN
 
-        IF(bapop .gt. quorum)THEN
+        IF(bapop .gt. quorum)THEN  !Maximum detachment rate dependent on density (i.e. competition)
 
             max_detach = grow_ba + (attach*list_bf(k))/(list_ba(k))
 
@@ -821,9 +841,9 @@ END IF
 
     detach = max_detach*(bapop/(k_detach+bapop))
 
-! Extracellular enzyme halflife
 
-!	enzyme half-life
+!**Exoenzyme half-life**
+
 	ehl_k = (LOG(0.5)/(tfac_hl*ehl))*(-1.)
 
 
@@ -831,56 +851,60 @@ END IF
 !        FLUXES
 !------------------------
 
-!Sinking Rates In
+!**Sinking Rates In**
+
 IF(k == 1) THEN
+
 	fpom_in = (pom_in_top)/dz
 	fba_in = ((fpom_in)/(dw*0.001*0.12))*(quorum*qfrac)	
-!	fba_in = ba_poc*fpom_in !See Table 1 in Ghighlione et al. 2009, 1E11 is attached bacteria at 150 m and 26.4 is pom at 150 m 
 	fenz_in = 0.
 	fh_in = 0.
 
 ELSE
 	
 	fpom_in = w*list_pom(k-1)/dz			!pom fluxing in from above
-	fenz_in = w*list_enz(k-1)/dz			!enz fluxing in from above
-	fh_in = w*list_h(k-1)/dz				!h fluxing in from above
-	fba_in = w*list_ba(k-1)/dz				!ba fluxing in from above
-	fdenz_in = w*list_denz(k-1)/dz			!dead enzyme fluxing in from above
+	fenz_in = w*list_enz(k-1)/dz			!exoenzyme fluxing in from above
+	fh_in = w*list_h(k-1)/dz				!hydrolysate fluxing in from above
+	fba_in = w*list_ba(k-1)/dz				!attached bacteria fluxing in from above
+	fdenz_in = w*list_denz(k-1)/dz			!dead exoenzyme fluxing in from above
 	
 END IF
 
-!Sinking Rates Out
+
+!**Sinking Rates Out**
+
 	fpom_out = (w*list_pom(k))/dz			!pom loss to sinking
-	fenz_out = (w*list_enz(k))/dz			!enz loss to sinking
-	fh_out = (w*list_h(k))/dz				!h loss to sinking
-	fba_out = (w*list_ba(k))/dz				!ba loss to sinking
-	fdenz_out = (w*list_denz(k))/dz			!dead enzyme loss to sinking
+	fenz_out = (w*list_enz(k))/dz			!exoenzyme loss to sinking
+	fh_out = (w*list_h(k))/dz				!hydrolysate loss to sinking
+	fba_out = (w*list_ba(k))/dz				!attached bacteria to sinking
+	fdenz_out = (w*list_denz(k))/dz			!dead exoenzyme loss to sinking
+
 
 !------------------------
 !        RATES
 !------------------------
 
 	jm_ba = m_ba*list_ba(k)**2.				!mortality of attached bacteria
-	jpom_dgd = pom_dgd*list_enz(k)			!degradation of pom by extracellular enzyme
+	jpom_dgd = pom_dgd*list_enz(k)			!degradation of pom by extracellular exoenzyme
     jup_ba = up_ba*list_ba(k)				!uptake by attached bacteria
 
     IF(scenario .eq. 2)THEN
 
-        hdom_check = h_hdom*((list_h(k)/(Vtotal*pnum))-list_hdom(k))*pnum - up_ba*list_ba(k)	!hydrolysate flux
+        hdom_check = h_hdom*((list_h(k)/(Vtotal*pnum))-list_hdom(k))*pnum - up_ba*list_ba(k) !hydrolysate interception
 
         IF (hdom_check .lt. 0.)THEN
 
-            jh_hdom = 0.
+            jh_hdom = 0. !hydrolysate flux rate out
 
         ELSE
 
-            jh_hdom = hdom_check
+            jh_hdom = hdom_check !hydrolysate flux rate out
 
         ENDIF
 
     ELSE
 
-        jh_hdom = (1.-bacover)*h_hdom*((list_h(k)/(Vtotal*pnum))-list_hdom(k))*pnum
+        jh_hdom = (1.-bacover)*h_hdom*((list_h(k)/(Vtotal*pnum))-list_hdom(k))*pnum !hydrolysate flux rate out
 
     ENDIF
 
@@ -889,34 +913,35 @@ END IF
 	jdetach = detach*list_ba(k)				!detachment rate of bacteria
 	jgrow_bf = grow_bf*list_bf(k)			!growth rate of free-living bacteria
 	jm_bf = m_bf*list_bf(k)**2.				!mortality rate of free-living bacteria
-    jepsilon = epsilon*list_ba(k)			!enzyme production rate by attached bacteria
+    jepsilon = epsilon*list_ba(k)			!exoenzyme production rate by attached bacteria
 
     IF(scenario .eq. 3)THEN
 
-    jenz_edom = (1.-bacover)*enz_edom*(((list_enz(k)-list_enz(k)*(Vcarbon/Vtotal))/(Vtotal*pnum))-list_edom(k))*pnum  !active enzyme flux
+    jenz_edom = (1.-bacover)*enz_edom*(((list_enz(k)-list_enz(k)*(Vcarbon/Vtotal))/(Vtotal*pnum))-list_edom(k))*pnum  !active exoenzyme flux
 
     ELSE
 
-    jenz_edom = enz_edom*(((list_enz(k)-list_enz(k)*(Vcarbon/Vtotal))/(Vtotal*pnum))-list_edom(k))*pnum  !active enzyme flux
+    jenz_edom = enz_edom*(((list_enz(k)-list_enz(k)*(Vcarbon/Vtotal))/(Vtotal*pnum))-list_edom(k))*pnum  !active exoenzyme flux
 
     ENDIF
 
-    jm_enz = ehl_k*list_enz(k)				!enzyme deactivation rate in the particle
+    jm_enz = ehl_k*list_enz(k)				!particle exoenzyme deactivation rate
 	jup_bf = up_bf*list_bf(k)				!uptake by free-living bacteria
-	jdedomdecay = decayK2*list_dedom(k)		!inactive enzyme decay rate to hdom
-	jdenzdecay = decayK2*list_denz(k)
+	jdedomdecay = decayK2*list_dedom(k)		!dissolved inactive exoenzyme decay rate
+	jdenzdecay = decayK2*list_denz(k)       !particle inactive exoenzyme decay rate
 
     IF(scenario .eq. 3)THEN
 
-	jdenz_dedom = (1.-bacover)*denz_dedom*((list_denz(k)/(Vtotal*pnum))-list_dedom(k))*pnum !inactive enzyme flux
+	jdenz_dedom = (1.-bacover)*denz_dedom*((list_denz(k)/(Vtotal*pnum))-list_dedom(k))*pnum !inactive exoenzyme flux
 
     ELSE
 
-    jdenz_dedom = denz_dedom*((list_denz(k)/(Vtotal*pnum))-list_dedom(k))*pnum !inactive enzyme flux
+    jdenz_dedom = denz_dedom*((list_denz(k)/(Vtotal*pnum))-list_dedom(k))*pnum !inactive exoenzyme flux
 
     ENDIF
 
-    jm_edom = ehl_k*list_edom(k)			!enzyme deactivation rate in the dissolved environment
+    jm_edom = ehl_k*list_edom(k)  !dissolved exoenzyme deactivation rate
+
 
 !-----------------------------
 !   CHANGE IN CONCENTRATION
@@ -964,7 +989,7 @@ END IF
 	
 	d_ba = (fba_in + jgrow_ba + jattach - jdetach - jm_ba - fba_out)*dt
 	
-	hcheck2 = list_h(k) + d_h  !In case, there is a rounding error
+	hcheck2 = list_h(k) + d_h  !In case there is a rounding error
 
     PRiNT*, "hcheck2 = ", hcheck2
 	
@@ -997,13 +1022,18 @@ END IF
 !       METRICS
 !---------------------------
 
-! Ratio of attached bacteria to free-living bacteria
-	b_ratio = list_ba(k)/list_bf(k)
+!**Ratio of attached bacteria to free-living bacteria**
 
-! Ratio of attached bacteria production to free-living bacteria production
-	bp_ratio = ((grow_ba*list_ba(k))/(list_ba(k)/cperb))/((grow_bf*list_bf(k))/(list_bf(k)/cperb))
-	
-! Flux of POC
+    b_ratio = list_ba(k)/list_bf(k)
+
+
+!**Ratio of attached bacterial production to free-living bacterial production**
+
+    bp_ratio = ((grow_ba*list_ba(k))/(list_ba(k)/cperb))/((grow_bf*list_bf(k))/(list_bf(k)/cperb))
+
+
+
+!**Flux of carbon from all sources**
 
 IF (k == 1) THEN	
 
@@ -1029,7 +1059,7 @@ END IF
 !---------------------------
 
 	
-	!Bacteria
+	!**Bacteria**
 	list_attach(k) = attach 
 	list_detach(k) = detach
 	list_ba_grow(k) = grow_ba
@@ -1039,7 +1069,7 @@ END IF
 	list_up_ba(k) = up_ba
 	list_up_bf(k) = up_bf
 	
-	!Mass Transfer
+	!**Mass transfer**
 	list_pnum(k) = pnum 
 	list_pom_dgd(k) = pom_dgd 
 	list_h_hdom(k) = h_hdom
@@ -1048,7 +1078,7 @@ END IF
 	list_denz_dom(k) = denz_dedom
 	list_bacover(k) = bacover
 	
-	!Temperature Scaling
+	!**Temperature scaling**
 	list_tfacb(k) = tfac_b
 	list_tfacenz(k) = tfac_enz
 	list_tfachl(k) = tfac_hl
@@ -1057,9 +1087,6 @@ END IF
 !---------------------------
 !      ERROR CHECKING
 !---------------------------
-	
-	!PRINT *, "depth = ", depth
-	!PRINT*, "-----------------------------"
 
 	IF(list_pom(k) .lt. 0.)THEN
 	 
@@ -1107,10 +1134,19 @@ END IF
 !   PRINT FINAL OUTPUT TO FILES
 !-----------------------------------
 
-	IF (CountTime == 43200 .AND. k == MaxDepth) THEN  !518400 (180 days); 129600 (90 days); 86400 (60 days); 43200 (30 days)
-		
-			PRINT *, "Number of Time Steps = ", CountTime
-			
+	IF (CountTime == 43200 .AND. k == MaxDepth) THEN  !518400 (180 days); 259200 (90 days); 172800 (60 days); 86400 (30 days); 43200 (15 days)
+
+            Days = (CountTime*30.)/60./60./24.
+
+            PRINT*, "Days of Simulation = ", Days
+
+            IF(Days .lt. 180.) THEN
+
+                PRINT*, "**WARNING: 180 days needed for steady state**"
+                PRINT*, "Change simulation time in the PRINT FINAL OUTPUT TO FILES section of MRM1D_v1.0.F90"
+
+            END IF
+
 			DO i=1, MaxDepth
 
 				WRITE(2,5) list_depth(i), list_pom(i), list_enz(i), list_h(i), list_ba(i), list_hdom(i), list_bf(i),&
@@ -1126,9 +1162,6 @@ END IF
 				WRITE(4,8) list_depth(i), list_pnum(i), list_pom_dgd(i), list_h_hdom(i), list_ehl_k(i), list_enz_dom(i), list_denz_dom(i),&
 				list_bacover(i) 
 				8 FORMAT(I4,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5)
-		
-!				WRITE(11,12) list_depth(i), list_tfacb(i), list_tfacenz(i), list_tfachl(i)
-!				12 FORMAT(I4,1X,1PE12.5,1X,1PE12.5,1X,1PE12.5)
 				
 		
 			END DO
@@ -1139,6 +1172,10 @@ END IF
 
 
 k = k + 1  !Depth Counter
+
+!------------------
+!  END DEPTH LOOP
+!------------------
 
 END DO
 
@@ -1165,9 +1202,15 @@ IF(CountTime .eq. 10000 .or. CountTime .eq. 20000 .or. CountTime .eq. 30000 .or.
 PRINT *, "Time Iteration Completed = ", CountTime
 END IF
 
-!PRINT *, "Time Iteration Completed = ", CountTime
+
+
 CLOSE(10)
-CountTime = CountTime + 1
+
+CountTime = CountTime + 1 !Time Counter
+
+!------------------
+!  END TIME LOOP
+!------------------
 
 END DO
 

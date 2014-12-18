@@ -7,135 +7,135 @@ IMPLICIT NONE
 !  DESCRIPTION OF VARIABLES
 !----------------------------------
 !
-!       SCENARIO
+!   SCENARIO
 !
-!               scenario:       choices are:
-!                               (1) Interior - bacterial uptake is separate from diffusive flux from particle
-!                               (2) Interception - bacterial uptake is from the diffusive flux from particle
-!                               (3) Retention - exoenzyme and hydrolysate flux is stopped by attached bacteria
-!
-!
-!       TIME
-!
-!				dt:				time step (h)
-!
-!               t:              time iteration
+!       scenario:       choices are:
+!                       (1) Interior - bacterial uptake is separate from diffusive flux from particle
+!                       (2) Interception - bacterial uptake is from the diffusive flux from particle
+!                       (3) Retention - exoenzyme and hydrolysate flux is stopped by attached bacteria
 !
 !
-!   	ENVIRONMENTAL PARAMETERS
+!   TIME
 !
-!				temp:			temperature of seawater (°C)
+!       dt:				time step (h)
 !
-!				s:				salinity of seawater (psu)
+!       t:              time iteration
 !
-!				rho:			density of seawater (kg m^-3)
+!
+!   ENVIRONMENTAL PARAMETERS
+!
+!		temp:			temperature of seawater (°C)
+!
+!		s:				salinity of seawater (psu)
+!
+!		rho:			density of seawater (kg m^-3)
 !  
-!				sldoc:			semi-labile dissolved organic carbon (mg C m^-3)
+!		sldoc:			semi-labile dissolved organic carbon (mg C m^-3)
 !
 !               
-!       STATE VARIABLES
+!   STATE VARIABLES
 !               
-!               hdom:			hydrolysate dissolved organic matter (mg C m^-3)
+!       hdom:			hydrolysate dissolved organic matter (mg C m^-3)
 !           
-!               pom:			particulate organic matter (mg C m^-3)
+!       pom:			particulate organic matter (mg C m^-3)
 !                       
-!               bf:				free living bacteria (mg C m^-3)
+!       bf:				free living bacteria (mg C m^-3)
 !
-!               ba:				attached bacteria (mg C m^-3)
+!       ba:				attached bacteria (mg C m^-3)
 !
-!               enz:			exoenzyme in particle (mg C m^-3)
+!       enz:			exoenzyme in particle (mg C m^-3)
 !	
-!				h:				hydrolysate in particle (mg C m^-3)
+!       h:				hydrolysate in particle (mg C m^-3)
 !
-!				denz:			inactive exoenzyme in particle (mg C m^-3)
+!       denz:			inactive exoenzyme in particle (mg C m^-3)
 !
-!				edom:			active exoenzyme in dissolved environment (mg C m^-3)
+!       edom:			active exoenzyme in dissolved environment (mg C m^-3)
 !
-!				dedom:			inactive exoenzyme in dissolved environment (mg C m^-3)
+!		dedom:			inactive exoenzyme in dissolved environment (mg C m^-3)
 !
 !
-!       TEMPERATURE DEPENDENCE
+!   TEMPERATURE DEPENDENCE
 !
-!               q10_b:			q10 value for bacterial temperature dependence.
+!       q10_b:			q10 value for bacterial temperature dependence.
 !							
-!				q10_enz:		q10 value for exoenzyme activity rate.
+!       q10_enz:		q10 value for exoenzyme activity rate.
 !		
-!				q10_hl:			q10 value for exoenzyme half life.
+!       q10_hl:			q10 value for exoenzyme half life.
 !
 !
-!       POM PARAMETERS
+!   PARTICULATE ORGANIC MATTER PARAMETERS
 !
-!				r_top:			radius of the particle (m)
+!       r_top:			radius of the particle (m)
 !
-!				w:              flux rate of pom in m h^-1 (In 0D, used to calculate advective flux from particles)
+!		w:              flux rate of pom in m h^-1 (In 0D, used to calculate advective flux from particles)
 !
 !
-!       BACTERIA PARAMETERS
+!   BACTERIA PARAMETERS
 !
-!               up_max_bf:		maximum free-living bacteria uptake rate at 20°C (h^-1)
+!       up_max_bf:		maximum free-living bacteria uptake rate at 20°C (h^-1)
 !
-!				up_max_ba:		maximum attached bacteria uptake rate at 20°C (h^-1)
+!       up_max_ba:		maximum attached bacteria uptake rate at 20°C (h^-1)
 !							
-!               kh:				half saturation constant for attached bacterial uptake of hydrolysate (mg C m^-3 particle)
+!       kh:				half-saturation constant for attached bacterial uptake of hydrolysate (mg C m^-3 particle)
 !
-!               kdom:			half saturation constant for free-living bacterial uptake of dissolved hydrolysate (mg C m^-3 seawater)
+!       kdom:			half-saturation constant for free-living bacterial uptake of dissolved hydrolysate (mg C m^-3 seawater)
 !
-!				bge_max:		maximum bacterial growth efficiency (Fig. 3, Del Giorgio and Cole 2000)
+!		bge_max:		maximum bacterial growth efficiency (Fig. 3, Del Giorgio and Cole 2000)
 !
-!				basal:			basal energetic cost at 20°C (h^-1) (based on the 0.01 day^-1 at 0°C from COBALT v1, Stock et al. 2013)
+!		basal:			basal energetic cost at 20°C (h^-1) (based on the 0.01 day^-1 at 0°C from COBALT v1, Stock et al. 2013)
 !		
-!				quorum:			bacterial biomass at quorum sensing threshold (mg C m^-3 particle)
+!		quorum:			bacterial biomass at quorum sensing threshold (mg C m^-3 particle)
 !
-!               qfrac:          fraction of the surface area of the particle covered by particle-attached bacteria
+!       qfrac:          fraction of the surface area of the particle covered by particle-attached bacteria
 !
-!				max_epsilon:	maximum exoenzyme production rate (h^-1)
+!       max_epsilon:    maximum exoenzyme production rate (h^-1)
 !
-!				m_bf:			mortality free-living bacteria (h^-1)
+!		m_bf:           mortality free-living bacteria (h^-1)
 !
-!				m_ba:			mortality of attached bacteria (h^-1)
+!		m_ba:           mortality of attached bacteria (h^-1)
 !
-!               cperb:          mg carbon per bacteria (mg C (bacteria)^-1)
+!       cperb:          mg carbon per bacteria (mg C (bacteria)^-1)
 ! 
-!               bdiam:          diameter of a rod-shaped bacteria (m)
+!       bdiam:          diameter of a rod-shaped bacteria (m)
 !
-!               blength:        length of a rod-shaped bacteria (m)
+!       blength:        length of a rod-shaped bacteria (m)
 !
 !
-!       EXOENZYME PARAMETERS
+!   EXOENZYME PARAMETERS
 !
-!				ehl:			half-life of exoenzyme activity (h)	(Steen and Arnosti 2011)
+!       ehl:            half-life of exoenzyme activity (h)	(Steen and Arnosti 2011)
 !
-!				epom:			maximum exoenzyme activity rate (mg C particle (mg C exoenzyme)^-1) (Steen and Arnosti 2011)
+!       epom:           maximum exoenzyme activity rate (mg C particle (mg C exoenzyme)^-1) (Steen and Arnosti 2011)
 !
-!				f_CaCO3:		calcium carbonate ballast preservation fraction mg C (mg CaCO3)^-1 (Klaas and Archer 2002)
+!       f_CaCO3:        calcium carbonate ballast preservation fraction mg C (mg CaCO3)^-1 (Klaas and Archer 2002)
 !
-!				f_opal:			opal ballast preservation fraction mg C (mg opal)^-1 (Klaas and Archer 2002)
+!       f_opal:         opal ballast preservation fraction mg C (mg opal)^-1 (Klaas and Archer 2002)
 !
-!				f_lith:			lithogenic material ballast preservation fraction mg C (mg lithogenic)^-1 (Klaas and Archer 2002)
+!       f_lith:         lithogenic material ballast preservation fraction mg C (mg lithogenic)^-1 (Klaas and Archer 2002)
 !			
-!				flux_CaCO3:		flux of calcium carbonate (mg CaCO3 m^-2 d^-1)
+!       flux_CaCO3:     flux of calcium carbonate (mg CaCO3 m^-2 d^-1)
 !
-!				flux_opal:		flux of opal (mg opal m^-2 d^-1)
+!		flux_opal:      flux of opal (mg opal m^-2 d^-1)
 !
-!				flux_lith:		flux of lithogenic material (mg lithogenic m^-2 d^-1)
+!		flux_lith:      flux of lithogenic material (mg lithogenic m^-2 d^-1)
 !               
 !               
-!		DIFFUSION PARAMETERS
+!	DIFFUSION PARAMETERS
 !
-!				bc:				Boltzmann constant (m^2 kg s^-2 K^-1)
+!		bc:             Boltzmann constant (m^2 kg s^-2 K^-1)
 !
-!				mr_enz:			molecular radius of a exoenzyme leucine aminopeptidase molecule (m)
+!		mr_enz:         molecular radius of a exoenzyme leucine aminopeptidase molecule (m)
 !
-!				mr_h:			molecular radius of a hydrolysate leucine molecule (m)
+!		mr_h:           molecular radius of a hydrolysate leucine molecule (m)
 !
-!               rho_Csub:       density of leucine
+!       rho_Csub:       density of leucine (mg m^-3)
 !
-!               Ratio_mmC:       dimensionless, ratio of molar mass Leucine to molar mass of carbon in Leucine
+!       Ratio_mmC:      ratio of molar mass Leucine to molar mass of carbon in Leucine (dimensionless)
 !
 !
-!       DOM PARAMETERS
+!   DOM PARAMETERS
 !   
-!               tt:		turnover time in years of semi-labile dom into labile dom (hdom)
+!       tt:             turnover time in years of semi-labile dom into labile dom (hdom)
 !
 !
 !------------------------------------
@@ -323,64 +323,64 @@ PRINT*, "scenario = ", scenario
 !	  DEFAULT PARAMETER VALUES
 !----------------------------------
 
-!		******************************************
-		hdom_initial	= 1.5			!mg C m^-3 seawater
-		bf_initial		= 1.5			!mg C m^-3 seawater
-		enz_initial		= 0.			!mg C m^-3 seawater
-		denz_initial	= 0.			!mg C m^-3 seawater
-		h_initial		= 0.			!mg C m^-3 seawater
-		edom_initial	= 0.			!mg C m^-3 seawater
-		dedom_initial	= 0.			!mg C m^-3 seawater
-!		******************************************
-		q10_b			= 2.			!
-		q10_enz			= 2.			!
-		q10_hl			= 2.			!
-!		******************************************
-        dt				= 0.00833		!h  (30 s)
-!		******************************************
-		w				= 2.			!m h^-1	(~50 m/day)
-		r_top			= 0.001			!m (1 mm)
-!		******************************************				
-		up_max_bf		= 0.25			!h^-1
-		up_max_ba		= 0.25			!h^-1
-        kh				= 200.          !5 mg C m^-3 particle
-		kdom			= 30.           !20 mg C m^-3 seawater
-		bge_max			= 0.4			!
-		basal			= 0.002			!h^-1 at 20°C
-		max_epsilon		= 0.028         !h^-1
-		m_bf			= 0.02			!h^-1
-		m_ba			= 0.04			!h^-1
-!		******************************************				
-		ehl				= 30.			!30 at 20°C; 72 at 7°C		(Steen and Arnosti 2011)
-        epom            = 118.          !at 20°C, q10=2 (Steen and Arnosti 2011)
-        rho_Csub        = 1.29E9        !mg m^-3 density of leucine
-        mr_enz			= 4.9E-9        !Leucine aminopeptidase	(Burley et al. 1990)
-        mr_h            = 1.5E-10       !m Leucine (Rawn 1989)
-        Ratio_mmC       = 131./72.      !dimensionless
-!		******************************************
-        f_CaCO3			= 0.075			!mg C (mg CaCO3)^-1			(Klaas and Archer 2002)
-		f_opal			= 0.029			!mg C (mg opal)^-1			(Klaas and Archer 2002)
-		f_lith			= 0.052			!mg C (mg lithogenic)^-1	(Klaas and Archer 2002)
-        flux_CaCO3      = 21.			!mg CaCO3 m^-2 d^-1			(Conte et al. 2001)
-		flux_opal       = 4.34			!mg opal m^-2 d^-1			(Conte et al. 2001)
-        flux_lith       = 6.77			!mg lith m^-2 d^-1			(Conte et al. 2001)
-!		******************************************
-		bc				= 1.38E-23		!m^2 kg s^-2 K^-1
-!		******************************************				
-		cperb			= 5.0E-12		!mg C (bacteria)^-1
-		bdiam			= 5.0E-7		!m							(Kirchman 2012)
-		blength			= 1.0E-6		!m							(Kirchman 2012)
-!		******************************************		
-		tt				= 5.			!years						(Abell et al. 2000)
-!		******************************************		
-		temp			= 20.           !degrees C, 19.19 BATS depth 150 m
-		s				= 36.632		!psu, BATS depth 150 m
-		rho				= 1026.226		!density, BATS depth 150 m
-		sldoc			= 174.77		!doc, BATS depth 150 m
-!		******************************************
-!		qfrac			= 1.0           !set in namelist
-!       max_epsilon     = 0.03          !set in namelist
-!		******************************************
+!******************************************
+hdom_initial	= 1.5			!mg C m^-3 seawater
+bf_initial		= 1.5			!mg C m^-3 seawater
+enz_initial		= 0.			!mg C m^-3 seawater
+denz_initial	= 0.			!mg C m^-3 seawater
+h_initial		= 0.			!mg C m^-3 seawater
+edom_initial	= 0.			!mg C m^-3 seawater
+dedom_initial	= 0.			!mg C m^-3 seawater
+!******************************************
+q10_b			= 2.			!
+q10_enz			= 2.			!
+q10_hl			= 2.			!
+!******************************************
+dt				= 0.00833		!h  (30 s)
+!******************************************
+w				= 2.			!m h^-1	(~50 m/day)
+r_top			= 0.001			!m (1 mm)
+!******************************************
+up_max_bf		= 0.25			!h^-1
+up_max_ba		= 0.25			!h^-1
+kh				= 200.          !5 mg C m^-3 particle
+kdom			= 30.           !20 mg C m^-3 seawater
+bge_max			= 0.4			!
+basal			= 0.002			!h^-1 at 20°C
+max_epsilon		= 0.028         !h^-1
+m_bf			= 0.02			!h^-1
+m_ba			= 0.04			!h^-1
+!******************************************
+ehl				= 30.			!30 at 20°C; 72 at 7°C (Steen and Arnosti 2011)
+epom            = 118.          !at 20°C, q10=2 (Steen and Arnosti 2011)
+rho_Csub        = 1.29E9        !mg m^-3 density of leucine
+mr_enz			= 4.9E-9        !Leucine aminopeptidase	(Burley et al. 1990)
+mr_h            = 1.5E-10       !m Leucine (Rawn 1989)
+Ratio_mmC       = 131./72.      !dimensionless
+!******************************************
+f_CaCO3			= 0.075			!mg C (mg CaCO3)^-1	(Klaas and Archer 2002)
+f_opal			= 0.029			!mg C (mg opal)^-1 (Klaas and Archer 2002)
+f_lith			= 0.052			!mg C (mg lithogenic)^-1 (Klaas and Archer 2002)
+flux_CaCO3      = 21.			!mg CaCO3 m^-2 d^-1 (Conte et al. 2001)
+flux_opal       = 4.34			!mg opal m^-2 d^-1 (Conte et al. 2001)
+flux_lith       = 6.77			!mg lith m^-2 d^-1 (Conte et al. 2001)
+!******************************************
+bc				= 1.38E-23		!m^2 kg s^-2 K^-1
+!******************************************
+cperb			= 5.0E-12		!mg C (bacteria)^-1
+bdiam			= 5.0E-7		!m (Kirchman 2012)
+blength			= 1.0E-6		!m (Kirchman 2012)
+!******************************************
+tt				= 5.			!years (Abell et al. 2000)
+!******************************************
+temp			= 20.           !degrees C, 19.19 BATS depth 150 m
+s				= 36.632		!psu, BATS depth 150 m
+rho				= 1026.226		!density, BATS depth 150 m
+sldoc			= 174.77		!doc, BATS depth 150 m
+!******************************************
+!qfrac			= 1.0           !set in namelist
+!max_epsilon     = 0.03         !set in namelist
+!******************************************
 
 
 !----------------------------------
@@ -416,9 +416,7 @@ OPEN(UNIT=4, FILE="MassTransferRates.out", STATUS='REPLACE')
 
 !----------------------------
 !  TEMPERATURE DEPENDENCE
-!----------------------------	
-
-! Calculate temperature scaling for each rate
+!----------------------------
 	
 	tfac_b =	q10_b**((temp-20.)/10.)
 
@@ -494,7 +492,7 @@ OPEN(UNIT=4, FILE="MassTransferRates.out", STATUS='REPLACE')
 !**Quorum-sensing threshold**
 	
 	quorum = ((4.*3.14*r**2.)/(bdiam*blength))*cperb  ! mg C particle^-1
-        !One layer of bacteria covering the particle
+        !One layer of bacteria covering the surface area of the spherical particle
 
 
 !**Initial particle-attached bacteria (PB)**
@@ -647,7 +645,7 @@ DO t = 2, finalt
 
         IF (hdom_check .lt. 0.)THEN
 
-            jh_hdom = 0.  !hydrolysate flux rate out
+            jh_hdom = 0. !hydrolysate flux rate out
 
         ELSE
 

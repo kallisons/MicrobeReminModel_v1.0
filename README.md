@@ -62,7 +62,24 @@ Running the model
 ------------------
 **0-dimensional configuration:**
 
+Change directory:  
+
+    cd MicrobeReminModel_v1.0/Model/MRM0D
+
+Command to run model:
+
+    sh RunModel_BATS_MRM0D.sh
+
 **1-dimensional configuration:**
+
+Change directory:  
+
+    cd MicrobeReminModel_v1.0/Model/MRM1D
+
+Command to run model:
+
+    sh RunModel_BATS_MRM1D.sh
+
 
 ----------------------------
 Test model output
@@ -71,7 +88,15 @@ Compare example model output created using the commands above to a set of test f
 
 **0-dimensional configuration:**
 
+Command to run comparison tests:
+
+    sh RunTest_BATS_MRM0D_Output.sh
+
 **1-dimensional configuration:**
+
+Command to run comparison tests:
+
+    sh RunTest_BATS_MRM1D_Output.sh
 
 --------------------------------
 Exoenzyme optimization analysis
