@@ -9,6 +9,8 @@ Mislan KAS, CA Stock, JP Dunne, and JL Sarmiento. 2015. Group behavior among mod
 ----------------------
 Software dependencies
 ----------------------
+All the required software is open source:
+
 gfortran version 5.0.0:   [https://gcc.gnu.org/wiki/GFortran](https://gcc.gnu.org/wiki/GFortran)
 
 R version 3.1.2: [http://www.r-project.org/](http://www.r-project.org/)
@@ -24,7 +26,7 @@ Folders
 
 **Output** -  The shell script that runs the model will put output files from the model in this folder.  The R code will access the model output from this folder.  
 
-**RCode** - The R code files to format the input data (DatatoInput folder) and analyze output (Analysis folder) and generate figures (Figures folder) are contained in this folder.
+**RCode** - The R code files are contained in this folder.
 
 **TestFiles** - Contains test files to verify the example output was generated correctly by the model.  
 
