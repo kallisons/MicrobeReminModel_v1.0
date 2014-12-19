@@ -131,7 +131,7 @@ Plot State Variables using R:
 
     Rscript MRM1D_StateVariables.R
 
-Plots are saved in the MicrobeReminModel_v1.0/Graphs folder.
+Plots are saved as postscript files in the MicrobeReminModel_v1.0/Graphs folder.
 
 
 
