@@ -117,7 +117,7 @@ Three scenarios were explored:
 (2) **Interception** - bacterial uptake is from the diffusive flux from particles  
 (3) **Retention** - exoenzyme and hydrolysate flux is stopped by particle-attached bacteria
 
-The default setting of the Microbial Remineralization Model (0D and 1D configurations) for the tests of the model output is interception (scenario 2).  The scenario setting can be changed in the SCENARIO sections in the MRM0D_v1.0.F90 and MRM1D_v1.0.F90 files.
+The default setting of the Microbial Remineralization Model (0D and 1D configurations) for the tests of the model output is interception (2).  The scenario setting can be changed in the SCENARIO sections in the MRM0D_v1.0.F90 and MRM1D_v1.0.F90 files.
 
 ------------------------
 Plot output from MRM1D
@@ -125,7 +125,7 @@ Plot output from MRM1D
 
 Change directory:  
 
-cd MicrobeReminModel_v1.0/RCode
+    cd MicrobeReminModel_v1.0/RCode
 
 Plot State Variables using R:
 
