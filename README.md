@@ -33,7 +33,7 @@ Folders
 ---------------------
 Configurations
 ---------------------
-**0-dimensional configuration:**  The 0D configuration of the Microbial Remineralization Model was developed to determine the effect of exoenzyme production on the growth of bacteria on particles.  This model was derived from the 1D configuration and used to determine optimal exoenzyme production.
+**0-dimensional configuration:**  The 0D configuration of the Microbial Remineralization Model was developed to determine the effect of exoenzyme production on the growth of bacteria on particles.  This configuration was derived from the 1D configuration and used to determine optimal exoenzyme production.
 
 **1-dimensional configuration:**  The 1D configuration of the Microbial Remineralization Model was developed to determine the effect of particle-attached bacteria on particle decomposition and remineralization in the deep ocean water column.  The depth range of the model is from 150 to 4000 m.  
 
@@ -118,6 +118,22 @@ Three scenarios were explored:
 (3) **Retention** - exoenzyme and hydrolysate flux is stopped by particle-attached bacteria
 
 The default setting of the Microbial Remineralization Model (0D and 1D configurations) for the tests of the model output is interception (scenario 2).  The scenario setting can be changed in the SCENARIO sections in the MRM0D_v1.0.F90 and MRM1D_v1.0.F90 files.
+
+------------------------
+Plot output from MRM1D
+------------------------
+
+Change directory:  
+
+cd MicrobeReminModel_v1.0/RCode
+
+Plot State Variables using R:
+
+    Rscript MRM1D_StateVariables.R
+
+Plots are saved in the MicrobeReminModel_v1.0/Graphs folder.
+
+
 
 --------------------------------
 Exoenzyme optimization analysis

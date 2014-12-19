@@ -3,13 +3,10 @@ bdiam<-5E-7
 blength<-1E-6
 cperb<-5E-12
 pom_initial<-0.6	
-
+pnum<-84
 numB<-(4*3.14*r^2)/(bdiam*blength)
 quorum<-numB*cperb
 
-dw<-(17*(r*2*1000)^1.8)	
-#pnum<-pom_initial/(dw*0.001*0.12)
-pnum<-84
 scenario = "Retention"
 
 filepath = paste("/Users/kasmith/Documents/EnzymeBacteriaModel/BacteriaModel/Experiments/Growth3/", scenario, "/", sep="")
