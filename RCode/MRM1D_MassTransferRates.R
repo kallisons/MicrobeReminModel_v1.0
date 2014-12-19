@@ -5,14 +5,19 @@ getwd() #shows the current working directory for the R gui.
 # Read in Model Output
 #----------------------
 
-brates<-read.table("Output/MRM1D/BacteriaRates/BacteriaRates_Sink2.00_Size0.0010_Qfrac0.25.out")
+bfolder<-paste("../Output/MRM1D/BacteriaRates/")
+bfiles<-list.files(bfolder)
+
+mtfolder<-paste("../Output/MRM1D/MassTransferRates/")
+mtfiles<-list.files(mtfolder)
+
+for(i in 1:length(bfiles)){
+
+brates<-read.table(paste(bfolder, bfiles[i]), sep="")
+
 
 colnames(brates)<-c("depth", "attach", "detach", "ba_grow", "bf_grow", "b_ratio", "bp_ratio", "up_ba", "up_bf")
-
-mtrates<-read.table("Output/MRM1D/MassTransferRates/MassTransferRates_Sink2.00_Size0.0010_Qfrac0.25.out")
-
 colnames(mtrates)<-c("depth", "pnum", "pom_dgd", "h_dom", "ehl_k", "enz_dom", "denz_dom", "bacover") 
-
 brates$depth<-brates$depth*-1
 mtrates$depth<-mtrates$depth*-1
 
@@ -96,3 +101,5 @@ axis(side=2, labels=FALSE)
 #title(plottitle, cex.main=1.5, line=0.2, outer=TRUE)
 
 #dev.off()
+
+}
