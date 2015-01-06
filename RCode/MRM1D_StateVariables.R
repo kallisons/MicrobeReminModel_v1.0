@@ -15,7 +15,6 @@ state<-read.table(paste(folder,files[i], sep=""))
 colnames(state)<-c("depth", "pom", "enz", "h", "ba", "hdom", "bf", "edom", "denz", "dedom", "pomflux", "baflux", "enzflux", "hflux", "denzflux")
 state$depth<-state$depth*-1
 
-
 outname<-substr(files[i], 1, nchar(files[i])-4)
 OutGraph<-paste("../Graphs/MRM1D1_", outname, ".ps", sep="")
 postscript(OutGraph, family="Helvetica", width=6, height=6.5)
