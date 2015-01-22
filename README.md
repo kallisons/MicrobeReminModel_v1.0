@@ -17,6 +17,13 @@ R version 3.1.2: [http://www.r-project.org/](http://www.r-project.org/)
 
 Mac OS X and Unix-like operating systems should be able to install gfortran and R without any additional dependencies.  Information on running the model on computers with Microsoft Windows operating systems is located towards the end of this README file.
 
+---------------------
+Configurations
+---------------------
+**0-dimensional configuration:**  The 0D configuration of the Microbial Remineralization Model was developed to determine the effect of exoenzyme production on the growth of bacteria on particles.  This configuration was derived from the 1D configuration and used to determine optimal exoenzyme production.
+
+**1-dimensional configuration:**  The 1D configuration of the Microbial Remineralization Model was developed to determine the effect of particle-attached bacteria on particle decomposition and remineralization in the deep ocean water column.  The depth range of the model is from 150 to 4000 m.  
+
 ---------
 Folders
 ---------
@@ -31,13 +38,6 @@ Folders
 **RCode** - The R code files are contained in this folder.
 
 **TestFiles** - Contains test files to verify the example output was generated correctly by the model.  
-
----------------------
-Configurations
----------------------
-**0-dimensional configuration:**  The 0D configuration of the Microbial Remineralization Model was developed to determine the effect of exoenzyme production on the growth of bacteria on particles.  This configuration was derived from the 1D configuration and used to determine optimal exoenzyme production.
-
-**1-dimensional configuration:**  The 1D configuration of the Microbial Remineralization Model was developed to determine the effect of particle-attached bacteria on particle decomposition and remineralization in the deep ocean water column.  The depth range of the model is from 150 to 4000 m.  
 
 ---------------------
 Compiling the model
@@ -123,11 +123,12 @@ Calculate and plot the optimal enzyme production rate (h<sup>-1</sup>) for diffe
     Rscript MRM0D_OptimalEpsilon.R
 
 The optimal epsilon values are written to text file in the MicrobeReminModel_v1.0/Analysis folder.  A plot of optimal epsilon is saved to the MicrobeReminModel_v1.0/Graphs folder.  
+
 Command to run comparison tests:
 
     sh RunTest_BATS_MRM0D_OptimalEpsilon.sh
 
-**Important Note:**  The resolution of max_epsilon values in the RunModel_BATS_MRM0D.sh file was reduced decrease the time required to perform functionality tests of the model output.  The resolution can be changed in the RunModel_BATS_MRM0D.sh file.
+**Important Note:**  The resolution of max_epsilon values in the RunModel_BATS_MRM0D.sh file was reduced to decrease the time required to perform functionality tests of the model output.  The resolution can be changed in the RunModel_BATS_MRM0D.sh file.
 
 ------------------------
 Plot output from MRM1D
@@ -165,7 +166,7 @@ The default setting of the Microbial Remineralization Model (0D and 1D configura
 Input files
 -------------------
 **Forcing File**  
-The model forcing input file has no header and contains the following comma delimited columns:
+The model forcing input file for MRM1D has no header and contains the following comma delimited columns:
 
 * day
 * hour and minute in the hhmm format
@@ -190,6 +191,8 @@ Windows operating systems require a unix environment to be installed in order fo
 
 Cygwin: [www.cygwin.com](www.cygwin.com)  
 MinGW: [www.mingw.org](www.mingw.org)
+
+In order to use the Rscript command in Microsoft Windows, the file path to the Rscript.exe needs to be specified.
 
 Command to run R code from a Windows CMD window:
 
