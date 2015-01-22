@@ -1,10 +1,10 @@
-MicrobeReminModel_v1.0
+MicrobeReminModel v1.0
 ======================
 The Microbial Remineralization Model v1.0 simulates the interactions between sinking particles and heterotrophic bacteria in the ocean water column in a 1-dimensional Eulerian framework. The model has 9 state variables including particulate organic carbon, particle-attached bacteria, free-living bacteria, active exoenzyme in the particle, inactive exoenzyme in the particle, hydrolysate in the particle, hydrolysate in the dissolved environment, active exoenzyme in the dissolved environment, and inactive exoenzyme in the dissolved environment.
 
 Please cite the following paper if you use this code:
 
-Mislan KAS, CA Stock, JP Dunne, and JL Sarmiento. 2015. Group behavior among model bacteria influences particulate carbon remineralization depths.  Journal of Marine Research.
+Mislan KAS, CA Stock, JP Dunne, and JL Sarmiento. 2014. Group behavior among model bacteria influences particulate carbon remineralization depths.  Journal of Marine Research.
 
 ----------------------
 Software dependencies
@@ -14,6 +14,8 @@ All the required software is open source:
 gfortran version 5.0.0:   [https://gcc.gnu.org/wiki/GFortran](https://gcc.gnu.org/wiki/GFortran)
 
 R version 3.1.2: [http://www.r-project.org/](http://www.r-project.org/)
+
+Mac OS X and Unix-like operating systems should be able to install gfortran and R without any additional dependencies.  Information on running the model on computers with Microsoft Windows operating systems is located towards the end of this README file.
 
 ---------
 Folders
@@ -63,7 +65,6 @@ Command to compile model:
 
     gfortran MRM1D_v1.0.F90 -o MRM1D1 -ffpe-summary=invalid,zero,overflow
 
-
 ------------------
 Running the model
 ------------------
@@ -79,6 +80,8 @@ Command to run model:
 
     sh RunModel_BATS_MRM0D.sh
 
+**Important Note:**  The resolution of max_epsilon values in the RunModel_BATS_MRM0D.sh file was reduced decrease the time required to perform functionality tests of the model output. The resolution can be changed in the RunModel_BATS_MRM0D.sh file.  
+
 **1-dimensional configuration:**
 
 Change directory:  
@@ -89,12 +92,12 @@ Command to run model:
 
     sh RunModel_BATS_MRM1D.sh
 
-MRM1D is set to run for 15 days for the tests of the model output to decrease the time required to perform functionality tests.  The model needs to be run for 180 days to reach steady state.  The number of time intervals can be changed in the PRINT FINAL OUTPUT TO FILES section towards the bottom of the MRM1D_v1.0.F90 file.
+**Important Note:**  MRM1D is set to run for 15 days for the tests of the model output to decrease the time required to perform functionality tests.  The model needs to be run for at least 180 days to reach steady state.  The number of time intervals can be changed in the PRINT FINAL OUTPUT TO FILES section towards the bottom of the MRM1D_v1.0.F90 file.
 
 ----------------------------
 Test model output
 ----------------------------
-Compare example model output created using the commands above to a set of test files to make sure the results are the same.  
+Compare example model output created using the commands above to a set of test files to make sure the results are the same.
 
 **0-dimensional configuration:**
 
@@ -108,6 +111,45 @@ Command to run comparison tests:
 
     sh RunTest_BATS_MRM1D_Output.sh
 
+----------------------------------------------
+Optimal exoenzyme production analysis MRM0D
+----------------------------------------------
+Change directory:  
+
+    cd MicrobeReminModel_v1.0/RCode
+
+Calculate and plot the optimal enzyme production rate (h<sup>-1</sup>) for different initial bacterial abundances per particle using R:
+
+    Rscript MRM0D_OptimalEpsilon.R
+
+The optimal epsilon values are written to text file in the MicrobeReminModel_v1.0/Analysis folder.  A plot of optimal epsilon is saved to the MicrobeReminModel_v1.0/Graphs folder.  
+Command to run comparison tests:
+
+    sh RunTest_BATS_MRM0D_OptimalEpsilon.sh
+
+**Important Note:**  The resolution of max_epsilon values in the RunModel_BATS_MRM0D.sh file was reduced decrease the time required to perform functionality tests of the model output.  The resolution can be changed in the RunModel_BATS_MRM0D.sh file.
+
+------------------------
+Plot output from MRM1D
+------------------------
+Change directory:  
+
+    cd MicrobeReminModel_v1.0/RCode
+
+Plot State Variables using R:
+
+    Rscript MRM1D_StateVariables.R
+
+Plot Bacterial Rates using R:
+
+    Rscript MRM1D_BacteriaRates.R
+
+Plot Mass Transfer Rates using R:
+
+    Rscript MRM1D_MassTransferRates.R
+
+Plots are saved as postscript files in the MicrobeReminModel_v1.0/Graphs folder.
+
 -------------------
 Changing scenarios
 -------------------
@@ -119,28 +161,43 @@ Three scenarios were explored:
 
 The default setting of the Microbial Remineralization Model (0D and 1D configurations) for the tests of the model output is Interception (2).  The scenario setting can be changed in the SCENARIO sections in the MRM0D_v1.0.F90 and MRM1D_v1.0.F90 files.
 
-------------------------
-Plot output from MRM1D
-------------------------
+-------------------
+Input files
+-------------------
+**Forcing File**  
+The model forcing input file has no header and contains the following comma delimited columns:
 
-Change directory:  
+* day
+* hour and minute in the hhmm format
+* seconds
+* carbon flux at 150 m (mg m<sup>-2</sup> h<sup>-1</sup>)
 
-    cd MicrobeReminModel_v1.0/RCode
+The number of time steps in the forcing input file needs to be less than or equal to the number of time steps in the entire time period being simulated.
 
-Plot State Variables using R:
+**Depth Profile**
+MRM1D requires a depth profile file with the following space delimited columns at 10 m depth intervals:
 
-    Rscript MRM1D_StateVariables.R
-
-Plots are saved as postscript files in the MicrobeReminModel_v1.0/Graphs folder.
-
-
+* depth (m)
+* temperature (degrees C)
+* salinity (psu)
+* density (kg m<sup>-3</sup>)
+* semi-labile doc (mg m<sup>-3</sup>)
 
 --------------------------------
-Exoenzyme optimization analysis
+Microsoft Windows
 --------------------------------
+Windows operating systems require a unix environment to be installed in order for gfortran to be installed.  Options include:
 
+Cygwin: [www.cygwin.com](www.cygwin.com)  
+MinGW: [www.mingw.org](www.mingw.org)
 
+Command to run R code from a Windows CMD window:
 
+c:\progra~1\R\R-3.1.2\bin\Rscript.exe MRM1D_StateVariables.R
+
+Command to run R code from a Windows cygwin shell:
+
+/cygdrive/c/progra~1/R/R-3.1.2/bin/Rscript.exe MRM1D_StateVariables.R
 
 ------------------
 Acknowledgements
