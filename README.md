@@ -52,7 +52,7 @@ Change directory:
 
 Command to compile model:
 
-    gfortran MRM0D_v1.0.F90 -o MRM0D1 -ffpe-summary=invalid,zero,overflow
+    gfortran MRM0D_v1.0.F90 -o MRM0D -ffpe-summary=invalid,zero,overflow
 
 **1-dimensional configuration:**  
 Open a shell window and change the directory to the MRM1D folder inside the MicrobeReminModel_v1.0/Model folder.  
@@ -63,7 +63,7 @@ Change directory:
 
 Command to compile model:
 
-    gfortran MRM1D_v1.0.F90 -o MRM1D1 -ffpe-summary=invalid,zero,overflow
+    gfortran MRM1D_v1.0.F90 -o MRM1D -ffpe-summary=invalid,zero,overflow
 
 ------------------
 Running the model

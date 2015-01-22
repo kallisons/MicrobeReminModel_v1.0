@@ -27,7 +27,7 @@ do
 	echo "/" >> sizesink.input
 	echo " " >> sizesink.input
 
-./MRM1D1 < sizesink.input
+./MRM1D < sizesink.input
 cp StateVariables.out ../../Output/MRM1D/StateVariables/StateVariables_Sink${w}_Size${r_top}_Qfrac${qfrac}.out
 cp BacteriaRates.out ../../Output/MRM1D/BacteriaRates/BacteriaRates_Sink${w}_Size${r_top}_Qfrac${qfrac}.out
 cp MassTransferRates.out ../../Output/MRM1D/MassTransferRates/MassTransferRates_Sink${w}_Size${r_top}_Qfrac${qfrac}.out

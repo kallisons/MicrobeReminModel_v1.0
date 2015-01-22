@@ -16,7 +16,7 @@ do
 	echo "/" >> grow2.input
 	echo " " >> grow2.input
 
-./MRM0D1 < grow2.input
+./MRM0D < grow2.input
 cp StateVariables.out ../../Output/MRM0D/StateVariables/StateVariables_maxe${max_epsilon}_qfrac${qfrac}.out
 cp BacteriaRates.out ../../Output/MRM0D/BacteriaRates/BacteriaRates_maxe${max_epsilon}_qfrac${qfrac}.out
 cp MassTransferRates.out ../../Output/MRM0D/MassTransferRates/MassTransferRates_maxe${max_epsilon}_qfrac${qfrac}.out
