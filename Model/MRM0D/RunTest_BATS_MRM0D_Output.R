@@ -1,7 +1,7 @@
-#Change working directory to MicrobeReminModel_v1.0/Model/MRMOD using the setwd() command or using the Misc menu.  
+#Change working directory to MicrobeReminModel_v1.0/Model/MRM0D using the setwd() command or using the Misc menu.  
 #getwd() #shows the current working directory for the R gui.  
 
-#The code in this file compares the output produced by the 1-dimensional version of the Microbial Remineralization Model with test files to make sure that the output is the same.  If the files have the same data (to 3 significant digits), then the tests are passed.  A passed test means that the model is working!  If the tests fail, the model is not working and should be compiled again.
+#The code in this file compares the output produced by the 0-dimensional version of the Microbial Remineralization Model with test files to make sure that the output is the same.  If the files have the same data (to 3 significant digits), then the tests are passed.  A passed test means that the model is working!  If the tests fail, the model is not working and should be compiled again.
 
 decimalplaces <- function(x) {      
        hold<-strsplit(sub('0+$', '', as.character(x)), ".", fixed=TRUE)
