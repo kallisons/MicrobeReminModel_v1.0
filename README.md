@@ -27,6 +27,8 @@ Configurations
 ---------
 Folders
 ---------
+**Analysis** - Results from the optimal exoenzyme production analysis are saved to this folder.
+
 **Graphs** -  Graphs of the model output plotted using R are saved to this folder.
 
 **Input** -  The 1-dimensional (MRM1D) configuration of the model requires two input files with environmental data. One input file has particulate organic carbon flux at the base of the euphotic zone for each time step. Another input file has a long-term average vertical profiles of temperature, salinity, density, and semi-labile dissolved organic carbon.  
@@ -205,10 +207,10 @@ Command to run R code from a Windows cygwin shell:
 ------------------
 Acknowledgements
 ------------------
-Ben Marwick and Rahul Biswas vetted this code release.  
+Ben Marwick and Rahul Biswas vetted this code release.
 
 Code Release:  
 KAS was supported by the Gordon and Betty Moore Foundation, the Alfred P. Sloan Foundation, and the Washington Research Foundation through the eScience Institute at the University of Washington.
 
 Scientific Research and Code Development:  
-KAS was supported by the Carbon Mitigation Initiative at Princeton University which is sponsored by BP and the NOAA Cooperative Institute for Climate Science (NA08OAR4320752).
+This research was supported by the Carbon Mitigation Initiative at Princeton University which is sponsored by BP and the NOAA Cooperative Institute for Climate Science (NA08OAR4320752).
