@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/8411/kallisons/MicrobeReminModel_v1.0.svg)](http://dx.doi.org/10.5281/zenodo.16145)
+
 Microbial Remineralization Model v1.0
 ======================
 The Microbial Remineralization Model v1.0 simulates the interactions between sinking particles and heterotrophic bacteria in the ocean water column in a 1-dimensional Eulerian framework. The model has 9 state variables including particulate organic carbon, particle-attached bacteria, free-living bacteria, active exoenzyme in the particle, inactive exoenzyme in the particle, hydrolysate in the particle, hydrolysate in the dissolved environment, active exoenzyme in the dissolved environment, and inactive exoenzyme in the dissolved environment.
