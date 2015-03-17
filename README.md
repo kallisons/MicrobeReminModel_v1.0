@@ -103,13 +103,13 @@ Compare example model output created using the commands above to a set of test f
 
 Command to run comparison tests:
 
-    sh RunTest_BATS_MRM0D_Output.sh
+    RScript RunTest_BATS_MRM0D_Output.R
 
 **1-dimensional configuration:**
 
 Command to run comparison tests:
 
-    sh RunTest_BATS_MRM1D_Output.sh
+    RScript RunTest_BATS_MRM1D_Output.R
 
 ----------------------------------------------
 Optimal exoenzyme production analysis MRM0D
@@ -126,7 +126,7 @@ The optimal epsilon values are written to text file in the MicrobeReminModel_v1.
 
 Command to run comparison tests:
 
-    sh RunTest_BATS_MRM0D_OptimalEpsilon.sh
+    RScript RunTest_BATS_MRM0D_OptimalEpsilon.R
 
 **Important Note:**  The resolution of max_epsilon values in the RunModel_BATS_MRM0D.sh file was reduced to decrease the time required to perform functionality tests of the model output.  The resolution can be changed in the RunModel_BATS_MRM0D.sh file.
 
@@ -205,6 +205,7 @@ Command to run R code from a Windows cygwin shell:
 ------------------
 Acknowledgements
 ------------------
+Ben Marwick and Rahul Biswas vetted this code release.
 
 Code Release:  
 KAS was supported by the Gordon and Betty Moore Foundation, the Alfred P. Sloan Foundation, and the Washington Research Foundation through the eScience Institute at the University of Washington.
