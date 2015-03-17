@@ -207,7 +207,7 @@ Command to run R code from a Windows cygwin shell:
 ------------------
 Acknowledgements
 ------------------
-Ben Marwick and Rahul Biswas vetted this code release.
+Ben Marwick, University of Washington, and Rahul Biswas, University of Washington, vetted this code release.
 
 Code Release:  
 KAS was supported by the Gordon and Betty Moore Foundation, the Alfred P. Sloan Foundation, and the Washington Research Foundation through the eScience Institute at the University of Washington.
