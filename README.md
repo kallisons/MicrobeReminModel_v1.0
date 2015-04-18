@@ -6,7 +6,7 @@ The Microbial Remineralization Model v1.0 simulates the interactions between sin
 
 Please cite the following paper if you use this code:
 
-Mislan KAS, CA Stock, JP Dunne, and JL Sarmiento. 2014. Group behavior among model bacteria influences particulate carbon remineralization depths.  Journal of Marine Research.
+Mislan KAS, CA Stock, JP Dunne, and JL Sarmiento. 2014. Group behavior among model bacteria influences particulate carbon remineralization depths.  Journal of Marine Research. 72:183-218
 
 ----------------------
 Software dependencies
